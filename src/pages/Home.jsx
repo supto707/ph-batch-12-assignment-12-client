@@ -7,7 +7,7 @@ const Home = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/products`)
+    axios.get(`${import.meta.env.VITE_API_URL}`)
       .then(res => setProducts(res.data))
       .catch(() => setProducts([]));
   }, []);
