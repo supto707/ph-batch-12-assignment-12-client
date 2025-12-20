@@ -112,96 +112,96 @@ const ProductDetails = () => {
           </div>
 
           {user && dbUser?.role === 'buyer' && dbUser?.status === 'approved' && (
-            <form onSubmit={handleOrder} className="space-y-4">
-              <h3 className="text-2xl font-bold">Place Order</h3>
+            <form onSubmit={handleOrder} className="space-y-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Place Order</h3>
               
-              <div className="form-control">
-                <label className="label"><span className="label-text">Email</span></label>
-                <input type="email" value={user.email} className="input input-bordered" readOnly />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input type="email" value={user.email} className="modern-input" readOnly />
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text">Product</span></label>
-                <input type="text" value={product.name} className="input input-bordered" readOnly />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Product</label>
+                <input type="text" value={product.name} className="modern-input" readOnly />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="form-control">
-                  <label className="label"><span className="label-text">First Name</span></label>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                   <input
                     type="text"
                     value={orderData.firstName}
                     onChange={(e) => setOrderData({...orderData, firstName: e.target.value})}
-                    className="input input-bordered"
+                    className="modern-input"
                     required
                   />
                 </div>
-                <div className="form-control">
-                  <label className="label"><span className="label-text">Last Name</span></label>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                   <input
                     type="text"
                     value={orderData.lastName}
                     onChange={(e) => setOrderData({...orderData, lastName: e.target.value})}
-                    className="input input-bordered"
+                    className="modern-input"
                     required
                   />
                 </div>
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text">Quantity</span></label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
                 <input
                   type="number"
                   value={orderData.quantity}
                   onChange={(e) => setOrderData({...orderData, quantity: e.target.value})}
-                  className="input input-bordered"
+                  className="modern-input"
                   min={product.minimumOrder}
                   max={product.quantity}
                   required
                 />
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text">Total Price</span></label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Total Price</label>
                 <input
                   type="text"
                   value={`$${totalPrice.toFixed(2)}`}
-                  className="input input-bordered"
+                  className="modern-input bg-gray-50"
                   readOnly
                 />
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text">Contact Number</span></label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
                 <input
                   type="tel"
                   value={orderData.contact}
                   onChange={(e) => setOrderData({...orderData, contact: e.target.value})}
-                  className="input input-bordered"
+                  className="modern-input"
                   required
                 />
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text">Delivery Address</span></label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Address</label>
                 <textarea
                   value={orderData.address}
                   onChange={(e) => setOrderData({...orderData, address: e.target.value})}
-                  className="textarea textarea-bordered"
+                  className="modern-input h-24 resize-none"
                   required
                 />
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text">Additional Notes</span></label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
                 <textarea
                   value={orderData.notes}
                   onChange={(e) => setOrderData({...orderData, notes: e.target.value})}
-                  className="textarea textarea-bordered"
+                  className="modern-input h-20 resize-none"
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary w-full">Place Order</button>
+              <button type="submit" className="btn-primary-clean w-full py-3 text-lg font-semibold">Place Order</button>
             </form>
           )}
         </div>
