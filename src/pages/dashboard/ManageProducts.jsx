@@ -57,7 +57,7 @@ const ManageProducts = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="table table-zebra">
+        <table className="table ">
           <thead>
             <tr>
               <th>Image</th>

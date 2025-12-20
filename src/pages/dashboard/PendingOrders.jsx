@@ -54,7 +54,7 @@ const PendingOrders = () => {
       <h1 className="text-3xl font-bold mb-6">Pending Orders</h1>
 
       <div className="overflow-x-auto">
-        <table className="table table-zebra">
+        <table className="table ">
           <thead>
             <tr>
               <th>Order ID</th>
