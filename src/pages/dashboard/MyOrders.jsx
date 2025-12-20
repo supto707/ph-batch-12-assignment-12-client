@@ -43,7 +43,7 @@ const MyOrders = () => {
     <div>
       <h1 className="text-3xl font-bold mb-6">My Orders</h1>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto text-black">
         <table className="table table-zebra">
           <thead>
             <tr>
