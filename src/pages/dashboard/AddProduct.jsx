@@ -73,7 +73,7 @@ const AddProduct = () => {
                 type="text"
                 {...register('name', { required: 'Product name is required' })}
                 placeholder="e.g., Premium Cotton T-Shirt"
-                className={`input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.name ? 'input-error border-error' : 'border-gray-300'}`}
+                className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.name ? 'input-error border-error' : 'border-gray-300'}`}
               />
               {errors.name && <span className="text-error text-sm mt-1">⚠️ {errors.name.message}</span>}
             </div>
@@ -84,7 +84,7 @@ const AddProduct = () => {
                 {...register('description', { required: 'Description is required' })}
                 placeholder="Describe your product features, materials, and benefits..."
                 rows="4"
-                className={`textarea textarea-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.description ? 'textarea-error border-error' : 'border-gray-300'}`}
+                className={`textarea textarea-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.description ? 'textarea-error border-error' : 'border-gray-300'}`}
               />
               {errors.description && <span className="text-error text-sm mt-1">⚠️ {errors.description.message}</span>}
             </div>
@@ -98,7 +98,7 @@ const AddProduct = () => {
                 <label className="label"><span className="label-text font-semibold text-gray-700">Category *</span></label>
                 <select
                   {...register('category', { required: 'Category is required' })}
-                  className={`select select-bordered bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.category ? 'select-error border-error' : 'border-gray-300'}`}
+                  className={`select select-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.category ? 'select-error border-error' : 'border-gray-300'}`}
                 >
                   <option value="">Select a category</option>
                   <option value="Shirt">Shirt</option>
@@ -117,7 +117,7 @@ const AddProduct = () => {
                   min="0"
                   {...register('price', { required: 'Price is required', min: { value: 0, message: 'Price must be positive' } })}
                   placeholder="0.00"
-                  className={`input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.price ? 'input-error border-error' : 'border-gray-300'}`}
+                  className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.price ? 'input-error border-error' : 'border-gray-300'}`}
                 />
                 {errors.price && <span className="text-error text-sm mt-1">⚠️ {errors.price.message}</span>}
               </div>
@@ -135,7 +135,7 @@ const AddProduct = () => {
                   min="1"
                   {...register('quantity', { required: 'Quantity is required', min: { value: 1, message: 'Must be at least 1' } })}
                   placeholder="0"
-                  className={`input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.quantity ? 'input-error border-error' : 'border-gray-300'}`}
+                  className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.quantity ? 'input-error border-error' : 'border-gray-300'}`}
                 />
                 {errors.quantity && <span className="text-error text-sm mt-1">⚠️ {errors.quantity.message}</span>}
               </div>
@@ -147,7 +147,7 @@ const AddProduct = () => {
                   min="1"
                   {...register('minimumOrder', { required: 'Minimum order is required', min: { value: 1, message: 'Must be at least 1' } })}
                   placeholder="1"
-                  className={`input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.minimumOrder ? 'input-error border-error' : 'border-gray-300'}`}
+                  className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.minimumOrder ? 'input-error border-error' : 'border-gray-300'}`}
                 />
                 {errors.minimumOrder && <span className="text-error text-sm mt-1">⚠️ {errors.minimumOrder.message}</span>}
               </div>
@@ -163,7 +163,7 @@ const AddProduct = () => {
                 {...register('images', { required: 'At least one image URL is required' })}
                 placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
                 rows="3"
-                className={`textarea textarea-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.images ? 'textarea-error border-error' : 'border-gray-300'}`}
+                className={`textarea textarea-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.images ? 'textarea-error border-error' : 'border-gray-300'}`}
               />
               {errors.images && <span className="text-error text-sm mt-1">⚠️ {errors.images.message}</span>}
               <p className="text-xs text-gray-500 mt-1">Enter multiple image URLs separated by commas</p>
@@ -175,7 +175,7 @@ const AddProduct = () => {
                 type="url"
                 {...register('demoVideo')}
                 placeholder="https://youtube.com/watch?v=..."
-                className="input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
               />
               {errors.demoVideo && <span className="text-error text-sm mt-1">⚠️ {errors.demoVideo.message}</span>}
             </div>
@@ -188,7 +188,7 @@ const AddProduct = () => {
               <label className="label"><span className="label-text font-semibold text-gray-700">Payment Options</span></label>
               <select
                 {...register('paymentOptions')}
-                className="select select-bordered bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="select select-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
               >
                 <option value="Cash on Delivery">Cash on Delivery</option>
                 <option value="PayFast">PayFast</option>

@@ -1,7 +1,7 @@
 const Modal = ({ id, title, children, onClose }) => {
   return (
     <dialog id={id} className="modal">
-      <div className="modal-box">
+      <div className="modal-box bg-white">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold text-lg">{title}</h3>
           <button 

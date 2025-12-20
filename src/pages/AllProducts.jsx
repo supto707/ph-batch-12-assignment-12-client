@@ -6,18 +6,21 @@ import { motion } from 'framer-motion';
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProducts();
-  }, [search]);
+  }, [search, category]);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/products`, {
-        params: { search }
-      });
+      const params = {};
+      if (search) params.search = search;
+      if (category) params.category = category;
+      
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/products`, { params });
       setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
       setProducts([]);
@@ -43,11 +46,12 @@ const AllProducts = () => {
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="modern-input flex-1"
+          className="input input-bordered border bg-white text-gray-900 placeholder-gray-400 flex-1 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition"
         />
         <select
-          onChange={(e) => setSearch(e.target.value)}
-          className="modern-input"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="select select-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition"
         >
           <option value="">All Categories</option>
           <option value="Shirt">Shirt</option>

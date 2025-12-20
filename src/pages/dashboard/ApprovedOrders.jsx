@@ -123,7 +123,7 @@ const ApprovedOrders = () => {
               <select
                 value={trackingData.status}
                 onChange={(e) => setTrackingData({...trackingData, status: e.target.value})}
-                className="select select-bordered bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="select select-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
               >
                 <option>Cutting Completed</option>
                 <option>Sewing Started</option>
@@ -141,7 +141,7 @@ const ApprovedOrders = () => {
                 type="text"
                 value={trackingData.location}
                 onChange={(e) => setTrackingData({...trackingData, location: e.target.value})}
-                className="input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
                 placeholder="e.g., Factory Floor A"
               />
             </div>
@@ -151,7 +151,7 @@ const ApprovedOrders = () => {
               <textarea
                 value={trackingData.note}
                 onChange={(e) => setTrackingData({...trackingData, note: e.target.value})}
-                className="textarea textarea-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none border-gray-300"
+                className="textarea textarea-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none border-gray-300"
                 rows="3"
                 placeholder="Additional notes..."
               />
@@ -163,7 +163,7 @@ const ApprovedOrders = () => {
                 type="datetime-local"
                 value={trackingData.date}
                 onChange={(e) => setTrackingData({...trackingData, date: e.target.value})}
-                className="input input-bordered bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="input input-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
               />
             </div>
           </div>
