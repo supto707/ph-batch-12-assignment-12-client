@@ -43,7 +43,7 @@ const ManageProducts = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Manage Products</h1>
-        <Link to="/dashboard/add-product" className="btn btn-primary">Add New Product</Link>
+        <Link to="/dashboard/add-product" className="btn-primary-clean">Add New Product</Link>
       </div>
 
       <div className="mb-6">
@@ -52,42 +52,42 @@ const ManageProducts = () => {
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="input input-bordered w-full max-w-md"
+          className="modern-input max-w-md"
         />
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="table ">
-          <thead>
+      <div className="clean-card overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-50">
             <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Payment</th>
-              <th>Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {products.map(product => (
-              <tr key={product._id}>
-                <td>
-                  <div className="avatar">
-                    <div className="w-16 h-16 rounded">
-                      <img src={product.images?.[0] || 'https://via.placeholder.com/150'} alt={product.name} />
-                    </div>
+              <tr key={product._id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden">
+                    <img src={product.images?.[0] || 'https://via.placeholder.com/150'} alt={product.name} className="w-full h-full object-cover" />
                   </div>
                 </td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td><span className="badge">{product.category}</span></td>
-                <td>{product.paymentOptions}</td>
-                <td>
-                  <div className="flex gap-2">
-                    <button className="btn btn-warning btn-xs">Edit</button>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${product.price}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">{product.category}</span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.paymentOptions}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <div className="flex gap-3">
+                    <button className="text-blue-600 hover:text-blue-900 font-medium">Edit</button>
                     <button 
                       onClick={() => handleDelete(product._id)}
-                      className="btn btn-error btn-xs"
+                      className="text-red-600 hover:text-red-900 font-medium"
                     >
                       Delete
                     </button>
