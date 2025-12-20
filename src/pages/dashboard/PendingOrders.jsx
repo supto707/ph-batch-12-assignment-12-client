@@ -27,8 +27,9 @@ const PendingOrders = () => {
         { status: 'approved', approvedAt: new Date() },
         { withCredentials: true }
       );
-      toast.success('Order approved');
-      fetchOrders();
+      toast.success('✓ Order approved successfully');
+      // Remove order from table immediately
+      setOrders(orders.filter(order => order._id !== orderId));
     } catch (error) {
       toast.error('Failed to approve order');
     }
@@ -42,8 +43,9 @@ const PendingOrders = () => {
         { status: 'rejected' },
         { withCredentials: true }
       );
-      toast.success('Order rejected');
-      fetchOrders();
+      toast.success('✓ Order rejected');
+      // Remove order from table immediately
+      setOrders(orders.filter(order => order._id !== orderId));
     } catch (error) {
       toast.error('Failed to reject order');
     }
@@ -51,7 +53,8 @@ const PendingOrders = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Pending Orders</h1>
+      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Pending Orders</h1>
+      <p className="text-gray-600 mb-6">Review and approve/reject customer orders</p>
 
       <div className="overflow-x-auto">
         <table className="table border">
