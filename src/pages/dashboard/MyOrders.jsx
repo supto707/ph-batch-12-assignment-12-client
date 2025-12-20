@@ -89,7 +89,7 @@ const MyOrders = () => {
                   >
                     View Details
                   </button>
-                  <Link to={`/dashboard/track-order/${order._id}`} className="btn btn-sm btn-outline">
+                  <Link to={`/dashboard/track-order/${order._id}`} className="btn btn-sm btn-primary">
                     Track
                   </Link>
                 </div>
@@ -150,7 +150,7 @@ const MyOrders = () => {
             <div className="modal-action justify-between mt-6">
               <Link 
                 to={`/dashboard/track-order/${selectedOrder._id}`} 
-                className="btn btn-outline"
+                className="btn btn-primary"
               >
                 Track Order
               </Link>
@@ -158,14 +158,14 @@ const MyOrders = () => {
                 {selectedOrder.status === 'pending' && (
                   <button 
                     onClick={() => handleCancel(selectedOrder._id)}
-                    className="btn btn-error btn-outline"
+                    className="btn btn-error"
                   >
                     Cancel Order
                   </button>
                 )}
                 <button 
                   onClick={() => document.getElementById('order_modal').close()}
-                  className="btn btn-outline"
+                  className="btn btn-primary"
                 >
                   Close
                 </button>
