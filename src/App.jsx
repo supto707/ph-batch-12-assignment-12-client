@@ -22,6 +22,7 @@ import MyOrders from './pages/dashboard/MyOrders';
 import TrackOrder from './pages/dashboard/TrackOrder';
 import Profile from './pages/dashboard/Profile';
 import Analytics from './pages/dashboard/Analytics';
+import DashboardHome from './pages/dashboard/DashboardHome';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
@@ -48,6 +49,7 @@ function App() {
               <Route path="/dashboard" element={
                 <PrivateRoute><DashboardLayout /></PrivateRoute>
               }>
+                <Route index element={<DashboardHome />} />
                 <Route path="profile" element={<Profile />} />
                 
                 <Route path="manage-users" element={

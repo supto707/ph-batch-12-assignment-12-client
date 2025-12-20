@@ -113,7 +113,7 @@ const ApprovedOrders = () => {
       )}
 
       <dialog id="tracking_modal" className="modal">
-        <div className="modal-box">
+        <div className="modal-box bg-white">
           <h3 className="font-bold text-lg mb-4">Add Tracking Update</h3>
           
           <div className="form-control mb-4">
@@ -173,7 +173,7 @@ const ApprovedOrders = () => {
 
       {orders.map(order => (
         <dialog key={order._id} id={`view_modal_${order._id}`} className="modal">
-          <div className="modal-box max-w-2xl">
+          <div className="modal-box max-w-2xl bg-white">
             <h3 className="font-bold text-lg mb-4">Tracking History</h3>
             
             {order.tracking && order.tracking.length > 0 ? (
