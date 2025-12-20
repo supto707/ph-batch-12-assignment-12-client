@@ -60,15 +60,15 @@ const AddProduct = () => {
   return (
     <div>
       <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Add New Product</h1>
-      <p className="text-gray-600 mb-8">Create and list a new product in your catalog</p>
+      <p className=" mb-8">Create and list a new product in your catalog</p>
       
       <div className="bg-white rounded-lg shadow-xl p-8 border border-gray-100">
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xl space-y-8">
           {/* Basic Information */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">📝 Basic Information</h2>
+            <h2 className="text-xl font-bold  pb-3 border-b-2 border-primary">📝 Basic Information</h2>
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Product Name *</span></label>
+              <label className="label"><span className="label-text font-semibold ">Product Name *</span></label>
               <input
                 type="text"
                 {...register('name', { required: 'Product name is required' })}
@@ -79,7 +79,7 @@ const AddProduct = () => {
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Description *</span></label>
+              <label className="label"><span className="label-text font-semibold ">Description *</span></label>
               <textarea
                 {...register('description', { required: 'Description is required' })}
                 placeholder="Describe your product features, materials, and benefits..."
@@ -92,10 +92,10 @@ const AddProduct = () => {
 
           {/* Category and Pricing */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">💰 Category & Pricing</h2>
+            <h2 className="text-xl font-bold  pb-3 border-b-2 border-primary">💰 Category & Pricing</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Category *</span></label>
+                <label className="label"><span className="label-text font-semibold ">Category *</span></label>
                 <select
                   {...register('category', { required: 'Category is required' })}
                   className={`select select-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.category ? 'select-error border-error' : 'border-gray-300'}`}
@@ -110,7 +110,7 @@ const AddProduct = () => {
               </div>
 
               <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Price (USD) *</span></label>
+                <label className="label"><span className="label-text font-semibold ">Price (USD) *</span></label>
                 <input
                   type="number"
                   step="0.01"
@@ -126,10 +126,10 @@ const AddProduct = () => {
 
           {/* Inventory */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">📦 Inventory</h2>
+            <h2 className="text-xl font-bold  pb-3 border-b-2 border-primary">📦 Inventory</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Available Quantity *</span></label>
+                <label className="label"><span className="label-text font-semibold ">Available Quantity *</span></label>
                 <input
                   type="number"
                   min="1"
@@ -141,7 +141,7 @@ const AddProduct = () => {
               </div>
 
               <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Minimum Order Quantity *</span></label>
+                <label className="label"><span className="label-text font-semibold ">Minimum Order Quantity *</span></label>
                 <input
                   type="number"
                   min="1"
@@ -156,9 +156,9 @@ const AddProduct = () => {
 
           {/* Media */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">🖼️ Media & Links</h2>
+            <h2 className="text-xl font-bold  pb-3 border-b-2 border-primary">🖼️ Media & Links</h2>
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Product Images (comma-separated URLs) *</span></label>
+              <label className="label"><span className="label-text font-semibold ">Product Images (comma-separated URLs) *</span></label>
               <textarea
                 {...register('images', { required: 'At least one image URL is required' })}
                 placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
@@ -166,11 +166,11 @@ const AddProduct = () => {
                 className={`textarea textarea-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.images ? 'textarea-error border-error' : 'border-gray-300'}`}
               />
               {errors.images && <span className="text-error text-sm mt-1">⚠️ {errors.images.message}</span>}
-              <p className="text-xs text-gray-500 mt-1">Enter multiple image URLs separated by commas</p>
+              <p className="text-xs  mt-1">Enter multiple image URLs separated by commas</p>
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Demo Video Link (optional)</span></label>
+              <label className="label"><span className="label-text font-semibold ">Demo Video Link (optional)</span></label>
               <input
                 type="url"
                 {...register('demoVideo')}
@@ -183,9 +183,9 @@ const AddProduct = () => {
 
           {/* Additional Settings */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">⚙️ Additional Settings</h2>
+            <h2 className="text-xl font-bold  pb-3 border-b-2 border-primary">⚙️ Additional Settings</h2>
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Payment Options</span></label>
+              <label className="label"><span className="label-text font-semibold ">Payment Options</span></label>
               <select
                 {...register('paymentOptions')}
                 className="select select-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
@@ -202,9 +202,9 @@ const AddProduct = () => {
                   {...register('showOnHome')}
                   className="checkbox checkbox-primary"
                 />
-                <span className="label-text font-semibold text-gray-700">Show on Home Page</span>
+                <span className="label-text font-semibold ">Show on Home Page</span>
               </label>
-              <p className="text-xs text-gray-500 mt-1">Featured products appear on the homepage</p>
+              <p className="text-xs  mt-1">Featured products appear on the homepage</p>
             </div>
           </div>
 

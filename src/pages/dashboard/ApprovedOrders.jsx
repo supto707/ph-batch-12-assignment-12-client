@@ -56,8 +56,8 @@ const ApprovedOrders = () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Approved Orders</h1>
-      <p className="text-gray-600 mb-6">Manage orders and add tracking updates</p>
+      <h1 className="text-4xl text-black font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Approved Orders</h1>
+      <p className=" mb-6">Manage orders and add tracking updates</p>
 
       <div className="overflow-x-auto">
         <table className="table border">
@@ -119,7 +119,7 @@ const ApprovedOrders = () => {
           
           <div className="space-y-4">
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Status *</span></label>
+              <label className="label"><span className="label-text font-semibold ">Status *</span></label>
               <select
                 value={trackingData.status}
                 onChange={(e) => setTrackingData({...trackingData, status: e.target.value})}
@@ -136,7 +136,7 @@ const ApprovedOrders = () => {
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Location *</span></label>
+              <label className="label"><span className="label-text font-semibold ">Location *</span></label>
               <input
                 type="text"
                 value={trackingData.location}
@@ -147,7 +147,7 @@ const ApprovedOrders = () => {
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Note (optional)</span></label>
+              <label className="label"><span className="label-text font-semibold ">Note (optional)</span></label>
               <textarea
                 value={trackingData.note}
                 onChange={(e) => setTrackingData({...trackingData, note: e.target.value})}
@@ -158,7 +158,7 @@ const ApprovedOrders = () => {
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Date & Time *</span></label>
+              <label className="label"><span className="label-text font-semibold ">Date & Time *</span></label>
               <input
                 type="datetime-local"
                 value={trackingData.date}
