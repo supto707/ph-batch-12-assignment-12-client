@@ -30,7 +30,7 @@ const AllOrders = () => {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="select select-bordered bg-white"
+          className="select border border-gray-300 rounded-md bg-white"
         >
           <option value="">All Status</option>
           <option value="pending">Pending</option>
@@ -39,11 +39,11 @@ const AllOrders = () => {
           <option value="cancelled">Cancelled</option>
         </select>
       </div>
-
+    
       <div className="overflow-x-auto">
-        <table className="table ">
+        <table className="table border ">
           <thead>
-            <tr>
+            <tr className='text-black'>
               <th>Order ID</th>
               <th>User</th>
               <th>Product</th>
