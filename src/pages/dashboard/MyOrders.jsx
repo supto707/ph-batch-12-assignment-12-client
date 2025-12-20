@@ -53,23 +53,24 @@ const MyOrders = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">My Orders</h1>
+      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">My Orders</h1>
+      <p className="text-gray-600 mb-6">View and track your orders</p>
 
       {orders.length === 0 ? (
-        <div className="text-center py-12 bg-base-200 rounded-lg">
-          <p className="text-xl opacity-60">No orders yet</p>
-          <Link to="/products" className="btn btn-primary mt-4">Browse Products</Link>
+        <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+          <p className="text-xl text-gray-600 mb-4">No orders yet</p>
+          <Link to="/products" className="btn btn-primary">Browse Products</Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {orders.map(order => (
-            <div key={order._id} className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div key={order._id} className="card bg-white border border-gray-200 shadow hover:shadow-lg transition-shadow">
               <div className="card-body">
-                <h2 className="card-title text-lg">Order #{order._id.slice(-8)}</h2>
-                <div className="space-y-2 text-sm">
-                  <p><span className="font-semibold">Product:</span> {order.productName}</p>
-                  <p><span className="font-semibold">Quantity:</span> {order.quantity}</p>
-                  <p><span className="font-semibold">Price:</span> ${order.totalPrice}</p>
+                <h2 className="card-title text-lg text-gray-900">Order #{order._id.slice(-8)}</h2>
+                <div className="space-y-2 text-sm text-gray-700">
+                  <p><span className="font-semibold text-gray-900">Product:</span> {order.productName}</p>
+                  <p><span className="font-semibold text-gray-900">Quantity:</span> {order.quantity}</p>
+                  <p><span className="font-semibold text-gray-900">Price:</span> ${order.totalPrice}</p>
                 </div>
                 <div className="mt-4">
                   <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
@@ -104,11 +105,11 @@ const MyOrders = () => {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">Order ID</p>
-                <p className="font-semibold">{selectedOrder._id}</p>
+                <p className="text-sm text-gray-600">Order ID</p>
+                <p className="font-semibold text-gray-900">{selectedOrder._id}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Status</p>
+                <p className="text-sm text-gray-600">Status</p>
                 <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
                   selectedOrder.status === 'approved' ? 'bg-green-100 text-green-800' :
                   selectedOrder.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -124,17 +125,17 @@ const MyOrders = () => {
 
             <div className="space-y-3">
               <div>
-                <p className="text-sm text-gray-500">Product Name</p>
-                <p className="font-semibold">{selectedOrder.productName}</p>
+                <p className="text-sm text-gray-600">Product Name</p>
+                <p className="font-semibold text-gray-900">{selectedOrder.productName}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Quantity</p>
-                  <p className="font-semibold">{selectedOrder.quantity}</p>
+                  <p className="text-sm text-gray-600">Quantity</p>
+                  <p className="font-semibold text-gray-900">{selectedOrder.quantity}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Total Price</p>
-                  <p className="font-semibold">${selectedOrder.totalPrice}</p>
+                  <p className="text-sm text-gray-600">Total Price</p>
+                  <p className="font-semibold text-gray-900">${selectedOrder.totalPrice}</p>
                 </div>
               </div>
             </div>
@@ -142,8 +143,8 @@ const MyOrders = () => {
             <div className="divider my-2"></div>
 
             <div className="space-y-2">
-              <p className="text-sm text-gray-500">Customer Email</p>
-              <p className="font-semibold">{selectedOrder.userEmail}</p>
+              <p className="text-sm text-gray-600">Customer Email</p>
+              <p className="font-semibold text-gray-900">{selectedOrder.userEmail}</p>
             </div>
 
             <div className="modal-action justify-between mt-6">

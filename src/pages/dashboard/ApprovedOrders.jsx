@@ -56,7 +56,7 @@ const ApprovedOrders = () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Approved Orders</h1>
+      <h1 className="text-4xl font-bold mb-2 text-black">Approved Orders</h1>
       <p className="text-gray-600 mb-6">Manage orders and add tracking updates</p>
 
       <div className="overflow-x-auto">
