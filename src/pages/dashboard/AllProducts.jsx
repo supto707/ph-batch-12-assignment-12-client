@@ -68,7 +68,7 @@ const AllProducts = () => {
                 <td>
                   <div className="avatar">
                     <div className="w-16 h-16 rounded">
-                      <img src={product.images?.[0] || 'https://via.placeholder.com/150'} alt={product.name} />
+                      <img src={product.images?.[0] || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext x="50%" y="50%" font-size="14" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E'} alt={product.name} />
                     </div>
                   </div>
                 </td>

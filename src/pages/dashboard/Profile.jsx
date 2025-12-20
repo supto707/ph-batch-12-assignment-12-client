@@ -21,7 +21,7 @@ const Profile = () => {
         <div className="flex items-center gap-6 mb-6">
           <div className="w-24 h-24 rounded-full overflow-hidden">
             <img 
-              src={user?.photoURL || 'https://via.placeholder.com/150'} 
+              src={user?.photoURL || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext x="50%" y="50%" font-size="12" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Photo%3C/text%3E%3C/svg%3E'} 
               alt={user?.displayName}
               className="w-full h-full object-cover"
             />

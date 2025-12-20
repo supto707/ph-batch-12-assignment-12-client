@@ -72,7 +72,7 @@ const ManageUsers = () => {
           placeholder="Search by name or email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="input input-bordered w-full max-w-md"
+          className="input input-bordered w-full max-w-md bg-white"
         />
       </div>
 
@@ -94,7 +94,7 @@ const ManageUsers = () => {
                   <div className="flex items-center gap-3">
                     <div className="avatar">
                       <div className="w-12 h-12 rounded-full">
-                        <img src={user.photoURL || 'https://via.placeholder.com/150'} alt={user.name} />
+                        <img src={user.photoURL || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext x="50%" y="50%" font-size="12" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Photo%3C/text%3E%3C/svg%3E'} alt={user.name} />
                       </div>
                     </div>
                     <span>{user.name}</span>

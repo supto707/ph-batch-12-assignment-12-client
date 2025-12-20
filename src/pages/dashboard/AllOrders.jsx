@@ -30,7 +30,7 @@ const AllOrders = () => {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="select select-bordered"
+          className="select select-bordered bg-white"
         >
           <option value="">All Status</option>
           <option value="pending">Pending</option>
@@ -93,7 +93,7 @@ const AllOrders = () => {
 
       {orders.map(order => (
         <dialog key={order._id} id={`modal_${order._id}`} className="modal">
-          <div className="modal-box max-w-2xl">
+          <div className="modal-box max-w-2xl bg-white">
             <h3 className="font-bold text-lg mb-4">Order Details</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -114,7 +114,7 @@ const AllOrders = () => {
               {order.notes && <p><strong>Notes:</strong> {order.notes}</p>}
             </div>
 
-            {order.tracking && order.tracking.length > 0 && (
+            {order.tracking && Array.isArray(order.tracking) && order.tracking.length > 0 && (
               <div className="mt-6">
                 <h4 className="font-bold mb-2">Tracking History</h4>
                 <div className="space-y-2">

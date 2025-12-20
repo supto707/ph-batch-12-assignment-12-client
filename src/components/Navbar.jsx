@@ -59,7 +59,7 @@ const Navbar = () => {
               <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
                   <div className="w-8 h-8 rounded-full overflow-hidden">
-                    <img src={user.photoURL || 'https://via.placeholder.com/150'} alt="User" className="w-full h-full object-cover" />
+                    <img src={user.photoURL || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext x="50%" y="50%" font-size="12" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Photo%3C/text%3E%3C/svg%3E'} alt="User" className="w-full h-full object-cover" />
                   </div>
                   <span className="text-sm font-medium text-gray-700">{user.displayName}</span>
                 </label>
