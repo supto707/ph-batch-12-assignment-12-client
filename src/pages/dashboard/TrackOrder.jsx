@@ -24,7 +24,7 @@ const TrackOrder = () => {
     <div>
       <h1 className="text-3xl font-bold mb-6">Track Order</h1>
 
-      <div className="card bg-base-100 shadow-xl mb-8">
+      <div className="card bg-white-100 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">Order Details</h2>
           <div className="grid grid-cols-2 gap-4">
@@ -42,7 +42,7 @@ const TrackOrder = () => {
         </div>
       </div>
 
-      <div className="card bg-base-100 shadow-xl">
+      <div className="card bg-white-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title mb-4">Production Timeline</h2>
           
