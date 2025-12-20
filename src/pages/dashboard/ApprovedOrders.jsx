@@ -56,8 +56,8 @@ const ApprovedOrders = () => {
 
   return (
     <div>
-      <h1 className="text-4xl text-black font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Approved Orders</h1>
-      <p className=" mb-6">Manage orders and add tracking updates</p>
+      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Approved Orders</h1>
+      <p className="text-gray-600 mb-6">Manage orders and add tracking updates</p>
 
       <div className="overflow-x-auto">
         <table className="table border">
@@ -119,11 +119,11 @@ const ApprovedOrders = () => {
           
           <div className="space-y-4">
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold ">Status *</span></label>
+              <label className="label"><span className="label-text font-semibold text-gray-700">Status *</span></label>
               <select
                 value={trackingData.status}
                 onChange={(e) => setTrackingData({...trackingData, status: e.target.value})}
-                className="select select-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="select select-bordered bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
               >
                 <option>Cutting Completed</option>
                 <option>Sewing Started</option>
@@ -136,34 +136,34 @@ const ApprovedOrders = () => {
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold ">Location *</span></label>
+              <label className="label"><span className="label-text font-semibold text-gray-700">Location *</span></label>
               <input
                 type="text"
                 value={trackingData.location}
                 onChange={(e) => setTrackingData({...trackingData, location: e.target.value})}
-                className="input input-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="input input-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
                 placeholder="e.g., Factory Floor A"
               />
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold ">Note (optional)</span></label>
+              <label className="label"><span className="label-text font-semibold text-gray-700">Note (optional)</span></label>
               <textarea
                 value={trackingData.note}
                 onChange={(e) => setTrackingData({...trackingData, note: e.target.value})}
-                className="textarea textarea-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none border-gray-300"
+                className="textarea textarea-bordered bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none border-gray-300"
                 rows="3"
                 placeholder="Additional notes..."
               />
             </div>
 
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold ">Date & Time *</span></label>
+              <label className="label"><span className="label-text font-semibold text-gray-700">Date & Time *</span></label>
               <input
                 type="datetime-local"
                 value={trackingData.date}
                 onChange={(e) => setTrackingData({...trackingData, date: e.target.value})}
-                className="input input-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                className="input input-bordered bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
               />
             </div>
           </div>
