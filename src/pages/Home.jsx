@@ -7,8 +7,8 @@ const Home = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}`)
-      .then(res => setProducts(res.data))
+    axios.get(`${import.meta.env.VITE_API_URL}/products/home`)
+      .then(res => setProducts(Array.isArray(res.data) ? res.data : []))
       .catch(() => setProducts([]));
   }, []);
 
@@ -29,14 +29,12 @@ const Home = () => {
               <p className="text-subtitle mb-8 max-w-lg">
                 Incredible Experience With Premium Quality Garments. We Have Developed State Of The Art Production Facilities.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button className="btn-primary-clean">
-                  Get Started
-                </button>
-                <button className="btn-outline-clean">
-                  View Products
-                </button>
-              </div>
+              <Link to="/login" className="btn-primary-clean">
+                Get Started
+              </Link>
+              <Link to="/products" className="btn-outline-clean">
+                View Products
+              </Link>
             </motion.div>
 
             <motion.div
