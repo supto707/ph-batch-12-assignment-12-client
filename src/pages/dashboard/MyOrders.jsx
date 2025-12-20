@@ -165,7 +165,7 @@ const MyOrders = () => {
                 )}
                 <button 
                   onClick={() => document.getElementById('order_modal').close()}
-                  className="btn"
+                  className="btn btn-outline"
                 >
                   Close
                 </button>
