@@ -56,7 +56,8 @@ const ApprovedOrders = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Approved Orders</h1>
+      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Approved Orders</h1>
+      <p className="text-gray-600 mb-6">Manage orders and add tracking updates</p>
 
       <div className="overflow-x-auto">
         <table className="table border">
@@ -113,60 +114,63 @@ const ApprovedOrders = () => {
       )}
 
       <dialog id="tracking_modal" className="modal">
-        <div className="modal-box bg-white">
-          <h3 className="font-bold text-lg mb-4">Add Tracking Update</h3>
+        <div className="modal-box bg-white max-w-md">
+          <h3 className="font-bold text-xl mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">📍 Add Tracking Update</h3>
           
-          <div className="form-control mb-4">
-            <label className="label"><span className="label-text">Status</span></label>
-            <select
-              value={trackingData.status}
-              onChange={(e) => setTrackingData({...trackingData, status: e.target.value})}
-              className="select select-bordered"
-            >
-              <option>Cutting Completed</option>
-              <option>Sewing Started</option>
-              <option>Finishing</option>
-              <option>QC Checked</option>
-              <option>Packed</option>
-              <option>Shipped</option>
-              <option>Out for Delivery</option>
-            </select>
+          <div className="space-y-4">
+            <div className="form-control">
+              <label className="label"><span className="label-text font-semibold text-gray-700">Status *</span></label>
+              <select
+                value={trackingData.status}
+                onChange={(e) => setTrackingData({...trackingData, status: e.target.value})}
+                className="select select-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+              >
+                <option>Cutting Completed</option>
+                <option>Sewing Started</option>
+                <option>Finishing</option>
+                <option>QC Checked</option>
+                <option>Packed</option>
+                <option>Shipped</option>
+                <option>Out for Delivery</option>
+              </select>
+            </div>
+
+            <div className="form-control">
+              <label className="label"><span className="label-text font-semibold text-gray-700">Location *</span></label>
+              <input
+                type="text"
+                value={trackingData.location}
+                onChange={(e) => setTrackingData({...trackingData, location: e.target.value})}
+                className="input input-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+                placeholder="e.g., Factory Floor A"
+              />
+            </div>
+
+            <div className="form-control">
+              <label className="label"><span className="label-text font-semibold text-gray-700">Note (optional)</span></label>
+              <textarea
+                value={trackingData.note}
+                onChange={(e) => setTrackingData({...trackingData, note: e.target.value})}
+                className="textarea textarea-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none border-gray-300"
+                rows="3"
+                placeholder="Additional notes..."
+              />
+            </div>
+
+            <div className="form-control">
+              <label className="label"><span className="label-text font-semibold text-gray-700">Date & Time *</span></label>
+              <input
+                type="datetime-local"
+                value={trackingData.date}
+                onChange={(e) => setTrackingData({...trackingData, date: e.target.value})}
+                className="input input-bordered focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
+              />
+            </div>
           </div>
 
-          <div className="form-control mb-4">
-            <label className="label"><span className="label-text">Location</span></label>
-            <input
-              type="text"
-              value={trackingData.location}
-              onChange={(e) => setTrackingData({...trackingData, location: e.target.value})}
-              className="input input-bordered"
-              placeholder="e.g., Factory Floor A"
-            />
-          </div>
-
-          <div className="form-control mb-4">
-            <label className="label"><span className="label-text">Note (optional)</span></label>
-            <textarea
-              value={trackingData.note}
-              onChange={(e) => setTrackingData({...trackingData, note: e.target.value})}
-              className="textarea textarea-bordered"
-              placeholder="Additional notes..."
-            />
-          </div>
-
-          <div className="form-control mb-4">
-            <label className="label"><span className="label-text">Date & Time</span></label>
-            <input
-              type="datetime-local"
-              value={trackingData.date}
-              onChange={(e) => setTrackingData({...trackingData, date: e.target.value})}
-              className="input input-bordered"
-            />
-          </div>
-
-          <div className="modal-action">
-            <button onClick={handleAddTracking} className="btn btn-primary">Add Update</button>
-            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn">Cancel</button>
+          <div className="modal-action mt-6 gap-2">
+            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn btn-outline">Cancel</button>
+            <button onClick={handleAddTracking} className="btn btn-primary">✓ Add Update</button>
           </div>
         </div>
       </dialog>

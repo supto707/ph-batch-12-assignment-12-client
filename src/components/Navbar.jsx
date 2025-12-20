@@ -64,7 +64,7 @@ const Navbar = () => {
                   <span className="text-sm font-medium text-gray-700">{user.displayName}</span>
                 </label>
                 <ul tabIndex={0} className="menu dropdown-content mt-3 z-[1] p-2 shadow-lg bg-white rounded-lg w-52 border border-gray-200">
-                  <li><Link to="/dashboard/profile" className="text-gray-700 hover:bg-gray-100 rounded-lg p-2">{user.displayName}</Link></li>
+                  <li><Link to="/dashboard/profile" className="text-gray-700 hover:bg-gray-100 rounded-lg p-2"> Profile {user.displayName}</Link></li>
                   <li><span className="text-xs text-gray-500 px-2 py-1">{dbUser?.role}</span></li>
                 </ul>
               </div>
