@@ -43,11 +43,11 @@ const MyOrders = () => {
     <div>
       <h1 className="text-3xl font-bold mb-6">My Orders</h1>
 
-      <div className="overflow-x-auto text-black">
+      <div className="overflow-x-auto">
         <table className="table table-zebra">
           <thead>
-            <tr>
-              <th>Order ID</th>
+            <tr className="text-black">
+              <th >Order ID</th>
               <th>Product</th>
               <th>Quantity</th>
               <th>Total Price</th>
