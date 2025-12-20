@@ -52,7 +52,7 @@ const AllProducts = () => {
       <div className="overflow-x-auto">
         <table className="table ">
           <thead>
-            <tr>
+            <tr className="text-black">
               <th>Image</th>
               <th>Product Name</th>
               <th>Price</th>
@@ -81,15 +81,15 @@ const AllProducts = () => {
                     type="checkbox"
                     checked={product.showOnHome || false}
                     onChange={() => handleToggleHome(product._id, product.showOnHome)}
-                    className="checkbox checkbox-primary"
+                    className="link-checkbox"
                   />
                 </td>
                 <td>
                   <div className="flex gap-2">
-                    <button className="btn btn-warning btn-xs">Edit</button>
+                    <button className="btn btn-warning btn-sm ">Edit</button>
                     <button 
                       onClick={() => handleDelete(product._id)}
-                      className="btn btn-error btn-xs"
+                      className="btn btn-error btn-sm"
                     >
                       Delete
                     </button>
