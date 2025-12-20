@@ -59,9 +59,9 @@ const ApprovedOrders = () => {
       <h1 className="text-3xl font-bold mb-6">Approved Orders</h1>
 
       <div className="overflow-x-auto">
-        <table className="table ">
+        <table className="table border">
           <thead>
-            <tr>
+            <tr className='text-black'>
               <th>Order ID</th>
               <th>User</th>
               <th>Product</th>

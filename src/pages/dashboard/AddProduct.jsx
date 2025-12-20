@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -6,31 +7,53 @@ import FormInput from '../../components/FormInput';
 
 const AddProduct = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, formState: { errors }, watch } = useForm({
     defaultValues: {
+      name: '',
+      description: '',
       category: 'Shirt',
+      price: '',
+      quantity: '',
+      minimumOrder: '1',
+      images: '',
+      demoVideo: '',
       paymentOptions: 'Cash on Delivery',
       showOnHome: false
     }
   });
 
   const onSubmit = async (data) => {
+    if (!data.images || data.images.trim() === '') {
+      toast.error('Please add at least one image URL');
+      return;
+    }
+
     const productData = {
-      ...data,
+      name: data.name,
+      description: data.description,
+      category: data.category,
       price: parseFloat(data.price),
       quantity: parseInt(data.quantity),
-      minimumOrder: parseInt(data.minimumOrder),
-      images: data.images.split(',').map(img => img.trim())
+      minimumOrder: parseInt(data.minimumOrder) || 1,
+      images: data.images.split(',').map(img => img.trim()).filter(img => img),
+      demoVideo: data.demoVideo || '',
+      paymentOptions: data.paymentOptions,
+      showOnHome: data.showOnHome === true || data.showOnHome === 'on'
     };
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/products`, productData, {
+      setLoading(true);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/products`, productData, {
         withCredentials: true
       });
       toast.success('Product added successfully!');
       navigate('/dashboard/manage-products');
     } catch (error) {
-      toast.error('Failed to add product');
+      console.error('Error adding product:', error);
+      toast.error(error.response?.data?.error || 'Failed to add product. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,6 +74,7 @@ const AddProduct = () => {
             {...register('description', { required: 'Description is required' })}
             className={`textarea textarea-bordered ${errors.description ? 'textarea-error' : ''}`}
             rows="4"
+            placeholder="Describe your product..."
           />
           {errors.description && <span className="text-error text-sm">{errors.description.message}</span>}
         </div>
@@ -59,85 +83,67 @@ const AddProduct = () => {
           <div className="form-control">
             <label className="label"><span className="label-text">Category</span></label>
             <select
-              value={formData.category}
-              onChange={(e) => setFormData({...formData, category: e.target.value})}
+              {...register('category', { required: 'Category is required' })}
               className="select select-bordered"
             >
-              <option>Shirt</option>
-              <option>Pant</option>
-              <option>Jacket</option>
-              <option>Accessories</option>
+              <option value="Shirt">Shirt</option>
+              <option value="Pant">Pant</option>
+              <option value="Jacket">Jacket</option>
+              <option value="Accessories">Accessories</option>
             </select>
+            {errors.category && <span className="text-error text-sm">{errors.category.message}</span>}
           </div>
 
-          <div className="form-control">
-            <label className="label"><span className="label-text">Price</span></label>
-            <input
-              type="number"
-              step="0.01"
-              value={formData.price}
-              onChange={(e) => setFormData({...formData, price: e.target.value})}
-              className="input input-bordered"
-              required
-            />
-          </div>
+          <FormInput
+            label="Price"
+            type="number"
+            step="0.01"
+            {...register('price', { required: 'Price is required' })}
+            error={errors.price?.message}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="form-control">
-            <label className="label"><span className="label-text">Available Quantity</span></label>
-            <input
-              type="number"
-              value={formData.quantity}
-              onChange={(e) => setFormData({...formData, quantity: e.target.value})}
-              className="input input-bordered"
-              required
-            />
-          </div>
+          <FormInput
+            label="Available Quantity"
+            type="number"
+            {...register('quantity', { required: 'Quantity is required' })}
+            error={errors.quantity?.message}
+          />
 
-          <div className="form-control">
-            <label className="label"><span className="label-text">Minimum Order Quantity</span></label>
-            <input
-              type="number"
-              value={formData.minimumOrder}
-              onChange={(e) => setFormData({...formData, minimumOrder: e.target.value})}
-              className="input input-bordered"
-              required
-            />
-          </div>
+          <FormInput
+            label="Minimum Order Quantity"
+            type="number"
+            {...register('minimumOrder', { required: 'Minimum order is required' })}
+            error={errors.minimumOrder?.message}
+          />
         </div>
 
         <div className="form-control">
           <label className="label"><span className="label-text">Images (comma-separated URLs)</span></label>
-          <input
-            type="text"
-            value={formData.images}
-            onChange={(e) => setFormData({...formData, images: e.target.value})}
-            className="input input-bordered"
+          <textarea
+            {...register('images', { required: 'At least one image URL is required' })}
+            className={`textarea textarea-bordered h-24 ${errors.images ? 'textarea-error' : ''}`}
             placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
-            required
           />
+          {errors.images && <span className="text-error text-sm">{errors.images.message}</span>}
         </div>
 
-        <div className="form-control">
-          <label className="label"><span className="label-text">Demo Video Link (optional)</span></label>
-          <input
-            type="url"
-            value={formData.demoVideo}
-            onChange={(e) => setFormData({...formData, demoVideo: e.target.value})}
-            className="input input-bordered"
-          />
-        </div>
+        <FormInput
+          label="Demo Video Link (optional)"
+          type="url"
+          {...register('demoVideo')}
+          error={errors.demoVideo?.message}
+        />
 
         <div className="form-control">
           <label className="label"><span className="label-text">Payment Options</span></label>
           <select
-            value={formData.paymentOptions}
-            onChange={(e) => setFormData({...formData, paymentOptions: e.target.value})}
+            {...register('paymentOptions')}
             className="select select-bordered"
           >
-            <option>Cash on Delivery</option>
-            <option>PayFast</option>
+            <option value="Cash on Delivery">Cash on Delivery</option>
+            <option value="PayFast">PayFast</option>
           </select>
         </div>
 
@@ -145,15 +151,27 @@ const AddProduct = () => {
           <label className="label cursor-pointer justify-start gap-4">
             <input
               type="checkbox"
-              checked={formData.showOnHome}
-              onChange={(e) => setFormData({...formData, showOnHome: e.target.checked})}
+              {...register('showOnHome')}
               className="checkbox"
             />
             <span className="label-text">Show on Home Page</span>
           </label>
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">Add Product</button>
+        <button 
+          type="submit" 
+          className="btn btn-primary w-full"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              Adding Product...
+            </>
+          ) : (
+            'Add Product'
+          )}
+        </button>
       </form>
     </div>
   );

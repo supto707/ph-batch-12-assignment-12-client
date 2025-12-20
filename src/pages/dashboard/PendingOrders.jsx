@@ -54,9 +54,9 @@ const PendingOrders = () => {
       <h1 className="text-3xl font-bold mb-6">Pending Orders</h1>
 
       <div className="overflow-x-auto">
-        <table className="table ">
+        <table className="table border">
           <thead>
-            <tr>
+               <tr className='text-black'>
               <th>Order ID</th>
               <th>User</th>
               <th>Product</th>
@@ -111,7 +111,7 @@ const PendingOrders = () => {
 
       {orders.map(order => (
         <dialog key={order._id} id={`modal_${order._id}`} className="modal">
-          <div className="modal-box">
+          <div className="modal-box bg-white">
             <h3 className="font-bold text-lg mb-4">Order Details</h3>
             <div className="space-y-2">
               <p><strong>Customer:</strong> {order.firstName} {order.lastName}</p>
