@@ -100,85 +100,85 @@ const Analytics = () => {
           {/* Detailed Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Products Card */}
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-gradient-to-br from-blue-50 to-blue-100 shadow-xl border border-blue-200">
               <div className="card-body">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="card-title text-2xl">📦 Products</h2>
-                    <p className="text-gray-500 text-sm">Total items in catalog</p>
+                    <h2 className="card-title text-2xl text-blue-900">📦 Products</h2>
+                    <p className="text-blue-600 text-sm">Total items in catalog</p>
                   </div>
-                  <div className="badge badge-lg badge-primary">{stats.totalProducts || 0}</div>
+                  <div className="badge badge-lg bg-blue-500 text-white">{stats.totalProducts || 0}</div>
                 </div>
-                <div className="divider my-2"></div>
+                <div className="divider my-2 bg-blue-200"></div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm opacity-70">Inventory Status</span>
-                    <progress className="progress progress-primary w-32" value={(stats.totalProducts || 0) * 2} max="100"></progress>
+                    <span className="text-sm text-blue-700 font-medium">Inventory Status</span>
+                    <progress className="progress progress-info w-32" value={(stats.totalProducts || 0) * 2} max="100"></progress>
                   </div>
-                  <p className="text-xs text-gray-500">Items actively managed in system</p>
+                  <p className="text-xs text-blue-600">Items actively managed in system</p>
                 </div>
               </div>
             </div>
 
             {/* Orders Card */}
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-gradient-to-br from-purple-50 to-purple-100 shadow-xl border border-purple-200">
               <div className="card-body">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="card-title text-2xl">🛒 Orders</h2>
-                    <p className="text-gray-500 text-sm">Customer purchases</p>
+                    <h2 className="card-title text-2xl text-purple-900">🛒 Orders</h2>
+                    <p className="text-purple-600 text-sm">Customer purchases</p>
                   </div>
-                  <div className="badge badge-lg badge-secondary">{stats.totalOrders || 0}</div>
+                  <div className="badge badge-lg bg-purple-500 text-white">{stats.totalOrders || 0}</div>
                 </div>
-                <div className="divider my-2"></div>
+                <div className="divider my-2 bg-purple-200"></div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm opacity-70">Order Volume</span>
+                    <span className="text-sm text-purple-700 font-medium">Order Volume</span>
                     <progress className="progress progress-secondary w-32" value={(stats.totalOrders || 0) * 3} max="100"></progress>
                   </div>
-                  <p className="text-xs text-gray-500">Total transactions processed</p>
+                  <p className="text-xs text-purple-600">Total transactions processed</p>
                 </div>
               </div>
             </div>
 
             {/* Users Card */}
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-gradient-to-br from-green-50 to-green-100 shadow-xl border border-green-200">
               <div className="card-body">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="card-title text-2xl">👥 Users</h2>
-                    <p className="text-gray-500 text-sm">Registered members</p>
+                    <h2 className="card-title text-2xl text-green-900">👥 Users</h2>
+                    <p className="text-green-600 text-sm">Registered members</p>
                   </div>
-                  <div className="badge badge-lg badge-accent">{stats.totalUsers || 0}</div>
+                  <div className="badge badge-lg bg-green-500 text-white">{stats.totalUsers || 0}</div>
                 </div>
-                <div className="divider my-2"></div>
+                <div className="divider my-2 bg-green-200"></div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm opacity-70">User Growth</span>
-                    <progress className="progress progress-accent w-32" value={(stats.totalUsers || 0) * 4} max="100"></progress>
+                    <span className="text-sm text-green-700 font-medium">User Growth</span>
+                    <progress className="progress progress-success w-32" value={(stats.totalUsers || 0) * 4} max="100"></progress>
                   </div>
-                  <p className="text-xs text-gray-500">Active user accounts</p>
+                  <p className="text-xs text-green-600">Active user accounts</p>
                 </div>
               </div>
             </div>
 
             {/* Revenue Card */}
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-gradient-to-br from-orange-50 to-orange-100 shadow-xl border border-orange-200">
               <div className="card-body">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="card-title text-2xl">💰 Revenue</h2>
-                    <p className="text-gray-500 text-sm">Total earnings</p>
+                    <h2 className="card-title text-2xl text-orange-900">💰 Revenue</h2>
+                    <p className="text-orange-600 text-sm">Total earnings</p>
                   </div>
-                  <div className="badge badge-lg badge-success">${(stats.revenue || 0).toLocaleString()}</div>
+                  <div className="badge badge-lg bg-orange-500 text-white">${(stats.revenue || 0).toLocaleString()}</div>
                 </div>
-                <div className="divider my-2"></div>
+                <div className="divider my-2 bg-orange-200"></div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm opacity-70">Financial Status</span>
-                    <progress className="progress progress-success w-32" value="80" max="100"></progress>
+                    <span className="text-sm text-orange-700 font-medium">Financial Status</span>
+                    <progress className="progress progress-warning w-32" value="80" max="100"></progress>
                   </div>
-                  <p className="text-xs text-gray-500">All time revenue accumulated</p>
+                  <p className="text-xs text-orange-600">All time revenue accumulated</p>
                 </div>
               </div>
             </div>
