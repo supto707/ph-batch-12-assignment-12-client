@@ -77,9 +77,9 @@ const ManageUsers = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="table table-zebra">
+        <table className="table">
           <thead>
-            <tr>
+            <tr className='text-black'>
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
