@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const AllProducts = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -86,7 +88,16 @@ const AllProducts = () => {
                 </td>
                 <td>
                   <div className="flex gap-2">
-                    <button className="btn btn-warning btn-sm ">Edit</button>
+                    <button 
+                      onClick={() => {
+                        toast.success(`Edit feature coming soon for: ${product.name}`);
+                        // Placeholder - uncomment when edit page is ready
+                        // navigate(`/dashboard/edit-product/${product._id}`);
+                      }}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </button>
                     <button 
                       onClick={() => handleDelete(product._id)}
                       className="btn btn-error btn-sm"
