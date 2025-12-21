@@ -55,59 +55,59 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="card bg-base-100 shadow-xl">
+        <div className="card bg-white shadow-xl">
           <div className="card-body">
             <h2 className="card-title mb-4">Send Us a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Name</span>
+                <label className="label pb-2">
+                  <span className="label-text font-medium">Name</span>
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="input input-bordered"
+                  className="input bg-white border border-gray-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-lg px-4 py-3 w-full transition"
                   required
                 />
               </div>
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Email</span>
+                <label className="label pb-2">
+                  <span className="label-text font-medium">Email</span>
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="input input-bordered"
+                  className="input bg-white border border-gray-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-lg px-4 py-3 w-full transition"
                   required
                 />
               </div>
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Subject</span>
+                <label className="label pb-2">
+                  <span className="label-text font-medium">Subject</span>
                 </label>
                 <input
                   type="text"
                   value={formData.subject}
                   onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                  className="input input-bordered"
+                  className="input bg-white border border-gray-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-lg px-4 py-3 w-full transition"
                   required
                 />
               </div>
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Message</span>
+                <label className="label pb-2">
+                  <span className="label-text font-medium">Message</span>
                 </label>
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="textarea textarea-bordered"
+                  className="textarea bg-white border border-gray-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-lg px-4 py-3 w-full transition resize-none"
                   rows="4"
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary w-full">Send Message</button>
+              <button type="submit" className="btn bg-blue-500 hover:bg-blue-600 text-white w-full">Send Message</button>
             </form>
           </div>
         </div>

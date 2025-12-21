@@ -262,7 +262,7 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-section-title mb-6">
+            <h2 className="text-section-title text-white mb-6">
               Interested To Start Your Production?
             </h2>
             <p className="text-xl mb-8 opacity-80">

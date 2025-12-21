@@ -10,19 +10,19 @@ const About = () => {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-white shadow-xl">
             <div className="card-body text-center">
               <h3 className="text-2xl font-bold text-primary">500+</h3>
               <p>Products</p>
             </div>
           </div>
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-white shadow-xl">
             <div className="card-body text-center">
               <h3 className="text-2xl font-bold text-primary">1,200+</h3>
               <p>Happy Clients</p>
             </div>
           </div>
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-white shadow-xl">
             <div className="card-body text-center">
               <h3 className="text-2xl font-bold text-primary">5,000+</h3>
               <p>Orders Completed</p>

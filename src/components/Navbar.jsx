@@ -37,7 +37,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-gray-900">
-          Garment
+          Garment House
         </Link>
 
         {/* Desktop Navigation */}

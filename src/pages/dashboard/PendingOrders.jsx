@@ -53,7 +53,7 @@ const PendingOrders = () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Pending Orders</h1>
+      <h1 className="text-4xl font-bold mb-2 text-black">Pending Orders</h1>
       <p className="text-gray-600 mb-6">Review and approve/reject customer orders</p>
 
       <div className="overflow-x-auto">
