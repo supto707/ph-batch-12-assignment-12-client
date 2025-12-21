@@ -213,13 +213,13 @@ const AddProduct = () => {
             <button 
               type="button" 
               onClick={() => navigate('/dashboard/manage-products')}
-              className="px-8 py-3 border-2 border-green-500 text-green-600 rounded hover:bg-green-50 active:bg-green-100 transition font-medium text-lg"
+              className="btn btn-outline btn-lg"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="px-8 py-3 bg-green-500 text-white rounded hover:bg-green-600 active:bg-green-700 transition font-medium text-lg min-w-48"
+              className="btn btn-primary btn-lg min-w-48"
               disabled={loading}
             >
               {loading ? (
