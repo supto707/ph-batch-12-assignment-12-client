@@ -116,7 +116,7 @@ const ManageUsers = () => {
                     {user.status === 'pending' && (
                       <button 
                         onClick={() => handleStatusUpdate(user._id, 'approved')}
-                        className="btn btn-success btn-xs"
+                        className="btn-custom btn-custom-success btn-custom-xs"
                       >
                         Approve
                       </button>
@@ -127,7 +127,7 @@ const ManageUsers = () => {
                           setSelectedUser(user);
                           document.getElementById('suspend_modal').showModal();
                         }}
-                        className="btn btn-error btn-xs"
+                        className="btn-custom btn-custom-error btn-custom-xs"
                       >
                         Suspend
                       </button>
@@ -135,7 +135,7 @@ const ManageUsers = () => {
                     {user.status === 'suspended' && (
                       <button 
                         onClick={() => handleStatusUpdate(user._id, 'approved')}
-                        className="btn btn-success btn-xs"
+                        className="btn-custom btn-custom-success btn-custom-xs"
                       >
                         Activate
                       </button>
@@ -168,8 +168,8 @@ const ManageUsers = () => {
             rows="4"
           />
           <div className="modal-action">
-            <button onClick={handleSuspend} className="btn btn-error">Suspend</button>
-            <button onClick={() => document.getElementById('suspend_modal').close()} className="btn">Cancel</button>
+            <button onClick={handleSuspend} className="btn-custom btn-custom-error btn-custom-sm">Suspend</button>
+            <button onClick={() => document.getElementById('suspend_modal').close()} className="btn-custom btn-custom-primary btn-custom-outline btn-custom-sm">Cancel</button>
           </div>
         </div>
       </dialog>

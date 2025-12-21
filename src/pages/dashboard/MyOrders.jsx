@@ -59,7 +59,7 @@ const MyOrders = () => {
       {orders.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
           <p className="text-xl text-gray-600 mb-4">No orders yet</p>
-          <Link to="/products" className="btn btn-primary">Browse Products</Link>
+          <Link to="/products" className="btn-custom btn-custom-primary btn-custom-base">Browse Products</Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -150,7 +150,7 @@ const MyOrders = () => {
             <div className="modal-action justify-between mt-6">
               <Link 
                 to={`/dashboard/track-order/${selectedOrder._id}`} 
-                className="btn btn-primary"
+                className="btn-custom btn-custom-primary btn-custom-sm"
               >
                 Track Order
               </Link>
@@ -158,14 +158,14 @@ const MyOrders = () => {
                 {selectedOrder.status === 'pending' && (
                   <button 
                     onClick={() => handleCancel(selectedOrder._id)}
-                    className="btn btn-error"
+                    className="btn-custom btn-custom-error btn-custom-sm"
                   >
                     Cancel Order
                   </button>
                 )}
                 <button 
                   onClick={() => document.getElementById('order_modal').close()}
-                  className="btn btn-primary"
+                  className="btn-custom btn-custom-primary btn-custom-sm"
                 >
                   Close
                 </button>

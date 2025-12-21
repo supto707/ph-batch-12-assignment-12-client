@@ -90,7 +90,7 @@ const Profile = () => {
               <button
                 onClick={handlePhotoUpdate}
                 disabled={loading}
-                className="btn btn-primary"
+                className="btn-custom btn-custom-primary btn-custom-base"
               >
                 {loading ? (
                   <>
@@ -155,7 +155,7 @@ const Profile = () => {
         <div className="flex justify-end mt-8">
           <button 
             onClick={handleLogout} 
-            className="btn btn-error"
+            className="btn-custom btn-custom-error btn-custom-base"
           >
             Logout
           </button>

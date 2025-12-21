@@ -86,10 +86,10 @@ const AllProducts = () => {
                 </td>
                 <td>
                   <div className="flex gap-2">
-                    <button className="btn btn-warning btn-sm ">Edit</button>
+                    <button className="btn-custom btn-custom-primary btn-custom-sm">Edit</button>
                     <button 
                       onClick={() => handleDelete(product._id)}
-                      className="btn btn-error btn-sm"
+                      className="btn-custom btn-custom-error btn-custom-sm"
                     >
                       Delete
                     </button>

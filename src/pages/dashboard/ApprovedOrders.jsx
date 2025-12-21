@@ -86,7 +86,7 @@ const ApprovedOrders = () => {
                         setSelectedOrder(order);
                         document.getElementById('tracking_modal').showModal();
                       }}
-                      className="btn btn-primary btn-xs"
+                      className="btn-custom btn-custom-primary btn-custom-xs"
                     >
                       Add Tracking
                     </button>
@@ -95,7 +95,7 @@ const ApprovedOrders = () => {
                         setSelectedOrder(order);
                         document.getElementById(`view_modal_${order._id}`).showModal();
                       }}
-                      className="btn btn-info btn-xs"
+                      className="btn-custom btn-custom-info btn-custom-xs"
                     >
                       View Tracking
                     </button>
@@ -169,8 +169,8 @@ const ApprovedOrders = () => {
           </div>
 
           <div className="modal-action mt-6 gap-2">
-            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn btn-outline">Cancel</button>
-            <button onClick={handleAddTracking} className="btn btn-primary">✓ Add Update</button>
+            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn-custom btn-custom-outline btn-custom-primary btn-custom-sm">Cancel</button>
+            <button onClick={handleAddTracking} className="btn-custom btn-custom-primary btn-custom-sm">✓ Add Update</button>
           </div>
         </div>
       </dialog>
@@ -198,7 +198,7 @@ const ApprovedOrders = () => {
             )}
 
             <div className="modal-action">
-              <button onClick={() => document.getElementById(`view_modal_${order._id}`).close()} className="btn">Close</button>
+              <button onClick={() => document.getElementById(`view_modal_${order._id}`).close()} className="btn-custom btn-custom-primary btn-custom-sm">Close</button>
             </div>
           </div>
         </dialog>

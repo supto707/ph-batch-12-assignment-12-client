@@ -82,19 +82,19 @@ const PendingOrders = () => {
                   <div className="flex gap-2">
                     <button 
                       onClick={() => handleApprove(order._id)}
-                      className="btn btn-success btn-outline btn-xs"
+                      className="btn-custom btn-custom-success btn-custom-outline btn-custom-xs"
                     >
                       Approve
                     </button>
                     <button 
                       onClick={() => handleReject(order._id)}
-                      className="btn btn-error btn-outline btn-xs"
+                      className="btn-custom btn-custom-error btn-custom-outline btn-custom-xs"
                     >
                       Reject
                     </button>
                     <button 
                       onClick={() => document.getElementById(`modal_${order._id}`).showModal()}
-                      className="btn btn-primary btn-outline btn-xs"
+                      className="btn-custom btn-custom-primary btn-custom-outline btn-custom-xs"
                     >
                       View
                     </button>

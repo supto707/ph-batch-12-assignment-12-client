@@ -213,13 +213,13 @@ const AddProduct = () => {
             <button 
               type="button" 
               onClick={() => navigate('/dashboard/manage-products')}
-              className="btn btn-outline btn-lg"
+              className="btn-custom btn-custom-primary btn-custom-outline btn-custom-lg"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="btn btn-primary btn-lg min-w-48"
+              className="btn-custom btn-custom-primary btn-custom-lg min-w-48"
               disabled={loading}
             >
               {loading ? (

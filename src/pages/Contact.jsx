@@ -107,7 +107,7 @@ const Contact = () => {
                   required
                 />
               </div>
-              <button type="submit" className="btn bg-blue-500 hover:bg-blue-600 text-white w-full">Send Message</button>
+              <button type="submit" className="btn-custom btn-custom-primary btn-custom-base w-full">Send Message</button>
             </form>
           </div>
         </div>
