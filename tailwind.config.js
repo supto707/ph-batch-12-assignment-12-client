@@ -40,24 +40,4 @@ export default {
       }
     },
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: [
-      {
-        light: {
-          "primary": "#22c55e",
-          "secondary": "#6b7280", 
-          "accent": "#22c55e",
-          "neutral": "#1a1a1a",
-          "base-100": "#ffffff",
-          "base-200": "#f9fafb",
-          "base-300": "#f3f4f6",
-          "success": "#22c55e",
-          "error": "#ef4444",
-          "warning": "#f59e0b",
-          "info": "#3b82f6",
-        }
-      }
-    ],
-  },
 }

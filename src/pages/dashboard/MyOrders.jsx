@@ -59,7 +59,7 @@ const MyOrders = () => {
       {orders.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
           <p className="text-xl text-gray-600 mb-4">No orders yet</p>
-          <Link to="/products" className="btn-custom btn-custom-primary btn-custom-base">Browse Products</Link>
+          <Link to="/products" className="inline-block px-6 py-3 bg-green-500 text-white rounded hover:bg-green-600 active:bg-green-700 transition font-medium">Browse Products</Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -150,7 +150,7 @@ const MyOrders = () => {
             <div className="modal-action justify-between mt-6">
               <Link 
                 to={`/dashboard/track-order/${selectedOrder._id}`} 
-                className="btn-custom btn-custom-primary btn-custom-sm"
+                className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 active:bg-green-700 transition font-medium text-sm"
               >
                 Track Order
               </Link>
@@ -158,14 +158,14 @@ const MyOrders = () => {
                 {selectedOrder.status === 'pending' && (
                   <button 
                     onClick={() => handleCancel(selectedOrder._id)}
-                    className="btn-custom btn-custom-error btn-custom-sm"
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 active:bg-red-700 transition font-medium text-sm"
                   >
                     Cancel Order
                   </button>
                 )}
                 <button 
                   onClick={() => document.getElementById('order_modal').close()}
-                  className="btn-custom btn-custom-primary btn-custom-sm"
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 active:bg-green-700 transition font-medium text-sm"
                 >
                   Close
                 </button>

@@ -107,7 +107,7 @@ const Contact = () => {
                   required
                 />
               </div>
-              <button type="submit" className="btn-custom btn-custom-primary btn-custom-base w-full">Send Message</button>
+              <button type="submit" className="px-6 py-2.5 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-700 transition font-medium text-base w-full">Send Message</button>
             </form>
           </div>
         </div>

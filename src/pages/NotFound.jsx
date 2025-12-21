@@ -9,7 +9,7 @@ const NotFound = () => {
         <p className="text-xl mb-8 opacity-70">
           The page you're looking for doesn't exist or has been moved.
         </p>
-        <Link to="/" className="btn-custom btn-custom-primary btn-custom-lg">
+        <Link to="/" className="inline-block px-8 py-3 bg-green-500 text-white text-lg rounded hover:bg-green-600 active:bg-green-700 transition font-medium">
           Go Back Home
         </Link>
       </div>

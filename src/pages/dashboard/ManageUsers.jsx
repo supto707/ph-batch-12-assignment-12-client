@@ -116,7 +116,7 @@ const ManageUsers = () => {
                     {user.status === 'pending' && (
                       <button 
                         onClick={() => handleStatusUpdate(user._id, 'approved')}
-                        className="btn-custom btn-custom-success btn-custom-xs"
+                        className="px-3 py-1.5 bg-green-500 text-white text-xs rounded hover:bg-green-600 active:bg-green-700 transition font-medium"
                       >
                         Approve
                       </button>
@@ -127,7 +127,7 @@ const ManageUsers = () => {
                           setSelectedUser(user);
                           document.getElementById('suspend_modal').showModal();
                         }}
-                        className="btn-custom btn-custom-error btn-custom-xs"
+                        className="px-3 py-1.5 bg-red-500 text-white text-xs rounded hover:bg-red-600 active:bg-red-700 transition font-medium"
                       >
                         Suspend
                       </button>
@@ -135,7 +135,7 @@ const ManageUsers = () => {
                     {user.status === 'suspended' && (
                       <button 
                         onClick={() => handleStatusUpdate(user._id, 'approved')}
-                        className="btn-custom btn-custom-success btn-custom-xs"
+                        className="px-3 py-1.5 bg-green-500 text-white text-xs rounded hover:bg-green-600 active:bg-green-700 transition font-medium"
                       >
                         Activate
                       </button>
@@ -168,8 +168,8 @@ const ManageUsers = () => {
             rows="4"
           />
           <div className="modal-action">
-            <button onClick={handleSuspend} className="btn-custom btn-custom-error btn-custom-sm">Suspend</button>
-            <button onClick={() => document.getElementById('suspend_modal').close()} className="btn-custom btn-custom-primary btn-custom-outline btn-custom-sm">Cancel</button>
+            <button onClick={handleSuspend} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 active:bg-red-700 transition font-medium text-sm">Suspend</button>
+            <button onClick={() => document.getElementById('suspend_modal').close()} className="px-4 py-2 border-2 border-green-500 text-green-600 rounded hover:bg-green-50 active:bg-green-100 transition font-medium text-sm">Cancel</button>
           </div>
         </div>
       </dialog>

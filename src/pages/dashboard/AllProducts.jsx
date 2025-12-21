@@ -86,10 +86,10 @@ const AllProducts = () => {
                 </td>
                 <td>
                   <div className="flex gap-2">
-                    <button className="btn-custom btn-custom-primary btn-custom-sm">Edit</button>
+                    <button className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 active:bg-green-700 transition font-medium">Edit</button>
                     <button 
                       onClick={() => handleDelete(product._id)}
-                      className="btn-custom btn-custom-error btn-custom-sm"
+                      className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 active:bg-red-700 transition font-medium"
                     >
                       Delete
                     </button>

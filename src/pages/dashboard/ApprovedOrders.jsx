@@ -86,7 +86,7 @@ const ApprovedOrders = () => {
                         setSelectedOrder(order);
                         document.getElementById('tracking_modal').showModal();
                       }}
-                      className="btn-custom btn-custom-primary btn-custom-xs"
+                      className="px-3 py-1.5 bg-green-500 text-white text-xs rounded hover:bg-green-600 active:bg-green-700 transition font-medium"
                     >
                       Add Tracking
                     </button>
@@ -95,7 +95,7 @@ const ApprovedOrders = () => {
                         setSelectedOrder(order);
                         document.getElementById(`view_modal_${order._id}`).showModal();
                       }}
-                      className="btn-custom btn-custom-info btn-custom-xs"
+                      className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 active:bg-blue-700 transition font-medium"
                     >
                       View Tracking
                     </button>
@@ -169,8 +169,8 @@ const ApprovedOrders = () => {
           </div>
 
           <div className="modal-action mt-6 gap-2">
-            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn-custom btn-custom-outline btn-custom-primary btn-custom-sm">Cancel</button>
-            <button onClick={handleAddTracking} className="btn-custom btn-custom-primary btn-custom-sm">✓ Add Update</button>
+            <button onClick={() => document.getElementById('tracking_modal').close()} className="px-4 py-2 border-2 border-green-500 text-green-600 rounded hover:bg-green-50 active:bg-green-100 transition font-medium text-sm">Cancel</button>
+            <button onClick={handleAddTracking} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 active:bg-green-700 transition font-medium text-sm">✓ Add Update</button>
           </div>
         </div>
       </dialog>
@@ -198,7 +198,7 @@ const ApprovedOrders = () => {
             )}
 
             <div className="modal-action">
-              <button onClick={() => document.getElementById(`view_modal_${order._id}`).close()} className="btn-custom btn-custom-primary btn-custom-sm">Close</button>
+              <button onClick={() => document.getElementById(`view_modal_${order._id}`).close()} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 active:bg-green-700 transition font-medium text-sm">Close</button>
             </div>
           </div>
         </dialog>
