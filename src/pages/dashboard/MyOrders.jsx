@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiPackage, FiTruck, FiBox, FiInfo, FiX, FiCornerUpRight, FiSearch } from 'react-icons/fi';
+import { FiPackage, FiTruck, FiBox, FiInfo, FiX, FiCornerUpRight, FiSearch, FiPlus } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 const MyOrders = () => {

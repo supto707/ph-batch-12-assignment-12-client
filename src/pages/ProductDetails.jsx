@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
@@ -24,7 +24,7 @@ const ProductDetails = () => {
     lastName: '',
     contact: '',
     address: '',
-    quantity: 1
+    quantity: '' // Initialize as empty to prevent uncontrolled warning before product loads
   });
 
   // Reset quantity when product loads
@@ -44,7 +44,11 @@ const ProductDetails = () => {
           axios.get(`${import.meta.env.VITE_API_URL}/products`, {
             params: { category: res.data.category }
           }).then(relatedRes => {
-            setRelatedProducts(relatedRes.data.filter(p => p._id !== id).slice(0, 4));
+            // Fix: API returns { products: [], ... } or direct array
+            const related = relatedRes.data?.products || (Array.isArray(relatedRes.data) ? relatedRes.data : []);
+            if (Array.isArray(related)) {
+              setRelatedProducts(related.filter(p => p._id !== id).slice(0, 4));
+            }
           });
         }
       });
@@ -166,6 +170,7 @@ const ProductDetails = () => {
                 <img
                   src={images[selectedImage]}
                   alt={product.name}
+                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80' }}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -180,7 +185,12 @@ const ProductDetails = () => {
                       onClick={() => setSelectedImage(idx)}
                       className={`flex-shrink-0 w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all ${selectedImage === idx ? 'border-[var(--primary)] scale-105 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}`}
                     >
-                      <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
+                      <img
+                        src={img}
+                        className="w-full h-full object-cover"
+                        alt="thumbnail"
+                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&q=80' }}
+                      />
                     </button>
                   ))}
                 </div>

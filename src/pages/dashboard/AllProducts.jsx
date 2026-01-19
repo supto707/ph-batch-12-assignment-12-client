@@ -88,6 +88,7 @@ const AllProducts = () => {
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Designation</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Unit Price</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Origin Terminal</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest text-center">Volume</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest text-center">Showcase</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest text-right">Operations</th>
               </tr>
@@ -95,7 +96,7 @@ const AllProducts = () => {
             <tbody className="divide-y divide-[var(--border)]">
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="p-20 text-center">
+                  <td colSpan="7" className="p-20 text-center">
                     <span className="loading loading-spinner text-[var(--primary)] loading-lg"></span>
                   </td>
                 </tr>
@@ -112,7 +113,12 @@ const AllProducts = () => {
                       >
                         <td className="p-6">
                           <div className="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-[var(--primary)]/20 ring-offset-2 ring-offset-[var(--bg-card)] shadow-lg group-hover:scale-105 transition-transform">
-                            <img src={product.images?.[0] || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=200'} alt={product.name} className="w-full h-full object-cover" />
+                            <img
+                              src={product.images?.[0] || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&q=80'}
+                              alt={product.name}
+                              onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&q=80' }}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                         </td>
                         <td className="p-6">
@@ -124,6 +130,13 @@ const AllProducts = () => {
                         <td className="p-6 font-black text-[var(--text-main)]">${product.price}</td>
                         <td className="p-6">
                           <div className="text-xs font-bold text-[var(--text-secondary)]">{product.createdBy}</div>
+                        </td>
+                        <td className="p-6">
+                          <div className="flex justify-center">
+                            <div className={`px-3 py-1 rounded-full text-[10px] font-black border ${product.quantity > 10 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-rose-500/10 text-rose-500 border-rose-500/20'}`}>
+                              {product.quantity}
+                            </div>
+                          </div>
                         </td>
                         <td className="p-6">
                           <div className="flex justify-center">

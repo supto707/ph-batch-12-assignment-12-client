@@ -82,13 +82,14 @@ const ManageProducts = () => {
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Unit Valuation</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Classification</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Payment Protocols</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Stockage Volume</th>
                 <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">System Protocols</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="p-20 text-center">
+                  <td colSpan="7" className="p-20 text-center">
                     <span className="loading loading-spinner text-[var(--primary)] loading-lg"></span>
                   </td>
                 </tr>
@@ -105,7 +106,12 @@ const ManageProducts = () => {
                       >
                         <td className="p-6">
                           <div className="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-[var(--primary)]/20 ring-offset-2 ring-offset-[var(--bg-card)] shadow-lg group-hover:scale-105 transition-transform">
-                            <img src={product.images?.[0] || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=200'} alt={product.name} className="w-full h-full object-cover" />
+                            <img
+                              src={product.images?.[0] || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&q=80'}
+                              alt={product.name}
+                              onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&q=80' }}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                         </td>
                         <td className="p-6">
@@ -119,6 +125,12 @@ const ManageProducts = () => {
                           </span>
                         </td>
                         <td className="p-6 text-xs font-bold text-[var(--text-secondary)]">{product.paymentOptions}</td>
+                        <td className="p-6">
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black border ${product.quantity > 10 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-rose-500/10 text-rose-500 border-rose-500/20'}`}>
+                            {product.quantity} Units
+                            {product.quantity <= 10 && <FiAlertCircle />}
+                          </div>
+                        </td>
                         <td className="p-6">
                           <div className="flex gap-2">
                             <button className="p-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--primary)] hover:text-white hover:border-[var(--primary)] transition-all shadow-sm" title="Edit Registry">

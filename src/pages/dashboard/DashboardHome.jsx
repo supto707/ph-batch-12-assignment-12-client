@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { FiPackage, FiShoppingCart, FiUsers, FiTrendingUp, FiArrowRight, FiUser, FiBarChart2, FiPieChart, FiActivity } from 'react-icons/fi';
+import { FiPackage, FiShoppingCart, FiUsers, FiTrendingUp, FiArrowRight, FiUser, FiBarChart2, FiPieChart, FiActivity, FiPlus } from 'react-icons/fi';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, PieChart, Pie, Cell, Legend
@@ -117,7 +117,7 @@ const DashboardHome = () => {
                 <h3 className="font-black text-lg uppercase tracking-wider">User Acquisition Growth</h3>
               </div>
               <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                   <AreaChart data={stats?.userGrowth}>
                     <defs>
                       <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
@@ -144,7 +144,7 @@ const DashboardHome = () => {
                 <h3 className="font-black text-lg uppercase tracking-wider">Revenue Synthesis</h3>
               </div>
               <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                   <BarChart data={stats?.salesStats}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
                     <XAxis dataKey="month" stroke="var(--text-muted)" fontSize={10} fontWeight="bold" />
@@ -164,7 +164,7 @@ const DashboardHome = () => {
                 <h3 className="font-black text-lg uppercase tracking-wider">Catalogue Segmentation</h3>
               </div>
               <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                   <PieChart>
                     <Pie
                       data={stats?.categoryStats}
@@ -219,7 +219,7 @@ const DashboardHome = () => {
             <div className="glass-card p-8 border border-[var(--border)]">
               <h3 className="font-black text-lg mb-8 uppercase tracking-wider">Production Category Split</h3>
               <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                   <PieChart>
                     <Pie data={stats?.categoryStats} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={100}>
                       {stats?.categoryStats?.map((entry, index) => (
@@ -261,7 +261,7 @@ const DashboardHome = () => {
             <div className="glass-card p-8 border border-[var(--border)]">
               <h3 className="font-black text-lg mb-8 uppercase tracking-wider">Order Status Tracking</h3>
               <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                   <PieChart>
                     <Pie data={stats?.statusDistribution} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={90} paddingAngle={10}>
                       {stats?.statusDistribution?.map((entry, index) => (
@@ -292,8 +292,5 @@ const DashboardHome = () => {
   );
 };
 
-export default DashboardHome;
 
-const FiPlus = () => (
-  <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-);
+export default DashboardHome;

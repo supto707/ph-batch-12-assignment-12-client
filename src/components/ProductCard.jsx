@@ -13,8 +13,9 @@ const ProductCard = ({ product, index }) => {
         >
             <div className="relative aspect-[4/3] overflow-hidden">
                 <img
-                    src={product.images?.[0] || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=300&fit=crop'}
+                    src={product.images?.[0] || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80'}
                     alt={product.name}
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80' }}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute top-4 left-4">
@@ -23,7 +24,7 @@ const ProductCard = ({ product, index }) => {
                         {product.category}
                     </span>
                 </div>
-                {product.stock > 0 ? (
+                {product.quantity > 0 ? (
                     <div className="absolute bottom-4 right-4">
                         <span className="bg-emerald-500/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-lg">
                             In Stock
