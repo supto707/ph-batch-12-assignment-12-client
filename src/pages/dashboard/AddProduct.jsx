@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import FormInput from '../../components/FormInput';
+import { motion } from 'framer-motion';
+import { FiPlus, FiBox, FiDollarSign, FiLayers, FiImage, FiVideo, FiCheckCircle, FiX, FiTag, FiFileText } from 'react-icons/fi';
 
 const AddProduct = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: '',
       description: '',
@@ -25,7 +26,7 @@ const AddProduct = () => {
 
   const onSubmit = async (data) => {
     if (!data.images || data.images.trim() === '') {
-      toast.error('Please add at least one image URL');
+      toast.error('Logistics documentation requires asset imagery');
       return;
     }
 
@@ -44,199 +45,227 @@ const AddProduct = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/products`, productData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/products`, productData, {
         withCredentials: true
       });
-      toast.success('Product added successfully!');
+      toast.success('Asset registration protocol successful');
       navigate('/dashboard/manage-products');
     } catch (error) {
-      console.error('Error adding product:', error);
-      toast.error(error.response?.data?.error || 'Failed to add product. Please try again.');
+      toast.error(error.response?.data?.error || 'Registration protocol failed');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Add New Product</h1>
-      <p className="text-gray-600 mb-8">Create and list a new product in your catalog</p>
-      
-      <div className="bg-white rounded-lg shadow-xl p-8 border border-gray-100">
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xl space-y-8">
-          {/* Basic Information */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">📝 Basic Information</h2>
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Product Name *</span></label>
-              <input
-                type="text"
-                {...register('name', { required: 'Product name is required' })}
-                placeholder="e.g., Premium Cotton T-Shirt"
-                className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.name ? 'input-error border-error' : 'border-gray-300'}`}
-              />
-              {errors.name && <span className="text-error text-sm mt-1">⚠️ {errors.name.message}</span>}
+    <div className="space-y-8 pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-[var(--text-main)] tracking-tighter flex items-center gap-3">
+            <FiPlus className="text-[var(--primary)]" /> Asset Registration
+          </h1>
+          <p className="text-[var(--text-muted)] font-medium text-sm mt-1 uppercase tracking-widest">Initialize New Product Entry in Catalog</p>
+        </div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card border border-[var(--border)] rounded-[40px] p-8 lg:p-12 shadow-2xl"
+      >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+          {/* Section: Core Identity */}
+          <div className="space-y-8">
+            <div className="flex items-center gap-3 pb-2 border-b border-[var(--border)]">
+              <FiTag className="text-[var(--primary)] text-xl" />
+              <h2 className="text-lg font-black text-[var(--text-main)] uppercase tracking-tighter">Core Identity</h2>
             </div>
 
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Description *</span></label>
-              <textarea
-                {...register('description', { required: 'Description is required' })}
-                placeholder="Describe your product features, materials, and benefits..."
-                rows="4"
-                className={`textarea textarea-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.description ? 'textarea-error border-error' : 'border-gray-300'}`}
-              />
-              {errors.description && <span className="text-error text-sm mt-1">⚠️ {errors.description.message}</span>}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-2 lg:col-span-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Asset Designation (Name)</label>
+                <div className="relative">
+                  <FiLayers className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                  <input
+                    type="text"
+                    {...register('name', { required: 'Designation required' })}
+                    placeholder="e.g., Industrial Grade Cotton Composite"
+                    className={`modern-input !pl-12 ${errors.name ? 'border-red-500' : ''}`}
+                  />
+                </div>
+                {errors.name && <span className="text-red-500 text-[10px] font-black uppercase tracking-widest ml-1">{errors.name.message}</span>}
+              </div>
+
+              <div className="space-y-2 lg:col-span-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Manifest Description</label>
+                <div className="relative">
+                  <FiFileText className="absolute left-4 top-6 text-[var(--primary)]" />
+                  <textarea
+                    {...register('description', { required: 'Manifest details required' })}
+                    placeholder="Specify material composition, technical specs, and utility features..."
+                    rows="4"
+                    className={`modern-input !pl-12 !py-4 min-h-[120px] resize-none ${errors.description ? 'border-red-500' : ''}`}
+                  />
+                </div>
+                {errors.description && <span className="text-red-500 text-[10px] font-black uppercase tracking-widest ml-1">{errors.description.message}</span>}
+              </div>
             </div>
           </div>
 
-          {/* Category and Pricing */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">💰 Category & Pricing</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Category *</span></label>
+          {/* Section: Commercial Parameters */}
+          <div className="space-y-8">
+            <div className="flex items-center gap-3 pb-2 border-b border-[var(--border)]">
+              <FiDollarSign className="text-[var(--primary)] text-xl" />
+              <h2 className="text-lg font-black text-[var(--text-main)] uppercase tracking-tighter">Commercial Parameters</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Sector Class</label>
                 <select
-                  {...register('category', { required: 'Category is required' })}
-                  className={`select select-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.category ? 'select-error border-error' : 'border-gray-300'}`}
+                  {...register('category', { required: 'Category selection required' })}
+                  className="modern-input font-bold appearance-none"
                 >
-                  <option value="">Select a category</option>
                   <option value="Shirt">Shirt</option>
                   <option value="Pant">Pant</option>
                   <option value="Jacket">Jacket</option>
                   <option value="Accessories">Accessories</option>
                 </select>
-                {errors.category && <span className="text-error text-sm mt-1">⚠️ {errors.category.message}</span>}
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Price (USD) *</span></label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  {...register('price', { required: 'Price is required', min: { value: 0, message: 'Price must be positive' } })}
-                  placeholder="0.00"
-                  className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.price ? 'input-error border-error' : 'border-gray-300'}`}
-                />
-                {errors.price && <span className="text-error text-sm mt-1">⚠️ {errors.price.message}</span>}
-              </div>
-            </div>
-          </div>
-
-          {/* Inventory */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">📦 Inventory</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Available Quantity *</span></label>
-                <input
-                  type="number"
-                  min="1"
-                  {...register('quantity', { required: 'Quantity is required', min: { value: 1, message: 'Must be at least 1' } })}
-                  placeholder="0"
-                  className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.quantity ? 'input-error border-error' : 'border-gray-300'}`}
-                />
-                {errors.quantity && <span className="text-error text-sm mt-1">⚠️ {errors.quantity.message}</span>}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Unit Valuation (USD)</label>
+                <div className="relative">
+                  <FiDollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                  <input
+                    type="number"
+                    step="0.01"
+                    {...register('price', { required: 'Valuation required' })}
+                    placeholder="0.00"
+                    className="modern-input !pl-12"
+                  />
+                </div>
               </div>
 
-              <div className="form-control">
-                <label className="label"><span className="label-text font-semibold text-gray-700">Minimum Order Quantity *</span></label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Stockage Volume</label>
+                <div className="relative">
+                  <FiBox className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                  <input
+                    type="number"
+                    {...register('quantity', { required: 'Volume count required' })}
+                    placeholder="0"
+                    className="modern-input !pl-12"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Min Protocol Qty</label>
                 <input
                   type="number"
-                  min="1"
-                  {...register('minimumOrder', { required: 'Minimum order is required', min: { value: 1, message: 'Must be at least 1' } })}
+                  {...register('minimumOrder', { required: 'Minimum protocol required' })}
                   placeholder="1"
-                  className={`input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition ${errors.minimumOrder ? 'input-error border-error' : 'border-gray-300'}`}
+                  className="modern-input"
                 />
-                {errors.minimumOrder && <span className="text-error text-sm mt-1">⚠️ {errors.minimumOrder.message}</span>}
+              </div>
+
+              <div className="space-y-2 lg:col-span-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Transaction Methods</label>
+                <select
+                  {...register('paymentOptions')}
+                  className="modern-input font-bold appearance-none"
+                >
+                  <option value="Cash on Delivery">Cash on Delivery</option>
+                  <option value="PayFast">PayFast</option>
+                </select>
               </div>
             </div>
           </div>
 
-          {/* Media */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">🖼️ Media & Links</h2>
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Product Images (comma-separated URLs) *</span></label>
-              <textarea
-                {...register('images', { required: 'At least one image URL is required' })}
-                placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
-                rows="3"
-                className={`textarea textarea-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none ${errors.images ? 'textarea-error border-error' : 'border-gray-300'}`}
-              />
-              {errors.images && <span className="text-error text-sm mt-1">⚠️ {errors.images.message}</span>}
-              <p className="text-xs text-gray-500 mt-1">Enter multiple image URLs separated by commas</p>
+          {/* Section: Multimedia Documentation */}
+          <div className="space-y-8">
+            <div className="flex items-center gap-3 pb-2 border-b border-[var(--border)]">
+              <FiImage className="text-[var(--primary)] text-xl" />
+              <h2 className="text-lg font-black text-[var(--text-main)] uppercase tracking-tighter">Multimedia Documentation</h2>
             </div>
 
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Demo Video Link (optional)</span></label>
-              <input
-                type="url"
-                {...register('demoVideo')}
-                placeholder="https://youtube.com/watch?v=..."
-                className="input input-bordered border bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
-              />
-              {errors.demoVideo && <span className="text-error text-sm mt-1">⚠️ {errors.demoVideo.message}</span>}
+            <div className="grid grid-cols-1 gap-8">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Asset Imagery (Comma-Delimited URLs)</label>
+                <div className="relative">
+                  <FiImage className="absolute left-4 top-6 text-[var(--primary)]" />
+                  <textarea
+                    {...register('images', { required: 'Visual data required' })}
+                    placeholder="https://cdn.example.com/asset1.jpg, https://cdn.example.com/asset2.jpg"
+                    className="modern-input !pl-12 !py-4 min-h-[100px] resize-none"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Direct Demonstration Link (Optional)</label>
+                <div className="relative">
+                  <FiVideo className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                  <input
+                    type="url"
+                    {...register('demoVideo')}
+                    placeholder="https://vimeo.com/demo/protocol-x"
+                    className="modern-input !pl-12"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Additional Settings */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 pb-3 border-b-2 border-primary">⚙️ Additional Settings</h2>
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Payment Options</span></label>
-              <select
-                {...register('paymentOptions')}
-                className="select select-bordered border bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition border-gray-300"
-              >
-                <option value="Cash on Delivery">Cash on Delivery</option>
-                <option value="PayFast">PayFast</option>
-              </select>
-            </div>
-
-            <div className="form-control">
-              <label className="label cursor-pointer justify-start gap-3">
+          {/* Section: Display Protocols */}
+          <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border)]">
+            <label className="flex items-center gap-4 cursor-pointer group">
+              <div className="relative w-12 h-6 bg-[var(--bg-primary)] border border-[var(--border)] rounded-full transition-colors group-hover:border-[var(--primary)]/50">
                 <input
                   type="checkbox"
                   {...register('showOnHome')}
-                  className="checkbox checkbox-primary"
+                  className="sr-only peer"
                 />
-                <span className="label-text font-semibold text-gray-700">Show on Home Page</span>
-              </label>
-              <p className="text-xs text-gray-500 mt-1">Featured products appear on the homepage</p>
-            </div>
+                <div className="absolute top-1 left-1 w-4 h-4 bg-[var(--text-muted)] rounded-full transition-all peer-checked:bg-[var(--primary)] peer-checked:translate-x-6 shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]"></div>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-black text-[var(--text-main)] uppercase tracking-widest">Homepage Frontline Protocol</span>
+                <p className="text-[10px] font-medium text-[var(--text-muted)] italic">Feature this asset prominently on the primary terminal.</p>
+              </div>
+            </label>
           </div>
 
-          {/* Submit Buttons */}
-          <div className="flex gap-3 justify-end pt-6 border-t border-gray-200">
-            <button 
-              type="button" 
+          {/* Submit Actions */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-end pt-8 border-t border-[var(--border)]">
+            <button
+              type="button"
               onClick={() => navigate('/dashboard/manage-products')}
-              className="btn btn-outline btn-lg"
+              className="btn-outline-clean !py-4 !px-12 font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2"
             >
-              Cancel
+              <FiX /> Abort Protocol
             </button>
-            <button 
-              type="submit" 
-              className="btn btn-primary btn-lg min-w-48"
+            <button
+              type="submit"
+              className="btn-gradient !py-4 !px-16 font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 min-w-[240px]"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <span className="loading loading-spinner loading-sm"></span>
-                  Adding Product...
+                  <span className="loading loading-spinner loading-xs"></span>
+                  Processing...
                 </>
               ) : (
-                '✓ Add Product'
+                <>
+                  <FiCheckCircle className="text-lg" /> Execute Registration
+                </>
               )}
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };
-
 
 export default AddProduct;

@@ -2,39 +2,43 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
+import { FiEdit3, FiLogOut, FiSave, FiX, FiShield, FiUser, FiMail, FiCalendar } from 'react-icons/fi';
 
 const Profile = () => {
   const { user, dbUser, logout, updateUserProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
   const [loading, setLoading] = useState(false);
 
-  const handlePhotoUpdate = async () => {
-    if (!photoURL.trim()) {
-      toast.error('Please enter a valid photo URL');
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!displayName.trim()) {
+      toast.error('Display Name is required');
       return;
     }
 
     try {
       setLoading(true);
-      
+
       // Update Firebase profile
-      await updateUserProfile(user?.displayName, photoURL);
-      
+      await updateUserProfile(displayName, photoURL);
+
       // Update database
       if (dbUser?._id) {
         await axios.patch(
           `${import.meta.env.VITE_API_URL}/users/${dbUser._id}`,
-          { photoURL },
+          { name: displayName, photoURL },
           { withCredentials: true }
         );
       }
-      
-      toast.success('Profile photo updated successfully!');
+
+      toast.success('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating photo:', error);
-      toast.error('Failed to update profile photo');
+      // Error updating profile
+      toast.error('Failed to update profile');
     } finally {
       setLoading(false);
     }
@@ -43,123 +47,153 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success('Logged out successfully');
+      toast.success('Safe journey! Logged out');
     } catch (error) {
       toast.error('Logout failed');
     }
   };
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">My Profile</h1>
-
-      <div className="clean-card max-w-2xl p-8">
-        {/* Profile Photo Section */}
-        <div className="flex items-center gap-6 mb-8">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary">
-            <img 
-              src={photoURL || user?.photoURL || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext x="50%" y="50%" font-size="12" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Photo%3C/text%3E%3C/svg%3E'} 
-              alt={user?.displayName}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-gray-900">{user?.displayName || 'User'}</h2>
-            <p className="text-gray-600 mb-4">{user?.email}</p>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="btn btn-sm btn-outline"
-            >
-              {isEditing ? 'Cancel' : 'Change Photo'}
-            </button>
-          </div>
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-20">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-black text-[var(--text-main)] tracking-tight">
+            Identity <span className="gradient-text">Registry</span>
+          </h1>
+          <p className="text-[var(--text-secondary)] font-medium mt-1">Manage your professional profile and credentials</p>
         </div>
+        <button
+          onClick={handleLogout}
+          className="btn-outline-clean !border-rose-500/20 !text-rose-500 hover:!bg-rose-500 hover:!text-white flex items-center gap-2"
+        >
+          <FiLogOut /> De-authenticate
+        </button>
+      </div>
 
-        {/* Photo Update Form */}
-        {isEditing && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <label className="label"><span className="label-text font-semibold">Photo URL</span></label>
-            <div className="flex gap-2">
-              <input
-                type="url"
-                value={photoURL}
-                onChange={(e) => setPhotoURL(e.target.value)}
-                placeholder="https://example.com/photo.jpg"
-                className="input input-bordered flex-1"
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Profile Card */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="lg:col-span-1 glass-card p-8 border border-[var(--border)] h-fit sticky top-24"
+        >
+          <div className="relative group mx-auto w-40 h-40 mb-6">
+            <div className="w-full h-full rounded-[40px] overflow-hidden border-4 border-[var(--primary)] shadow-2xl transition-transform group-hover:scale-105">
+              <img
+                src={user?.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400'}
+                alt={user?.displayName}
+                className="w-full h-full object-cover"
               />
-              <button
-                onClick={handlePhotoUpdate}
-                disabled={loading}
-                className="btn btn-primary"
-              >
-                {loading ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm"></span>
-                    Saving...
-                  </>
-                ) : (
-                  'Save'
-                )}
-              </button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Enter a direct image URL (e.g., from Imgur, Unsplash, or your image hosting service)</p>
-          </div>
-        )}
-
-        <div className="border-t border-gray-200 my-6"></div>
-
-        {/* User Information */}
-        <div className="space-y-6">
-          <div>
-            <p className="font-semibold text-gray-700 mb-2">Email</p>
-            <p className="text-gray-600">{user?.email}</p>
+            {!isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="absolute -bottom-2 -right-2 p-3 bg-[var(--primary)] text-white rounded-2xl shadow-xl hover:scale-110 transition-all"
+              >
+                <FiEdit3 />
+              </button>
+            )}
           </div>
 
-          <div>
-            <p className="font-semibold text-gray-700 mb-2">Role</p>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 capitalize">
-              {dbUser?.role || 'User'}
-            </span>
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-black text-[var(--text-main)] line-clamp-1">{user?.displayName || 'Unknown Subject'}</h2>
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-black uppercase tracking-widest border border-[var(--primary)]/20">
+              <FiShield className="mr-2" /> {dbUser?.role || 'User'}
+            </div>
           </div>
 
-          <div>
-            <p className="font-semibold text-gray-700 mb-2">Account Status</p>
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-              dbUser?.status === 'approved' ? 'bg-green-100 text-green-800' :
-              dbUser?.status === 'suspended' ? 'bg-red-100 text-red-800' :
-              'bg-yellow-100 text-yellow-800'
-            } capitalize`}>
-              {dbUser?.status || 'Pending'}
-            </span>
+          <div className="mt-8 pt-8 border-t border-[var(--border)] space-y-4">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-[var(--text-muted)] uppercase tracking-widest">Status</span>
+              <span className={`font-black ${dbUser?.status === 'approved' ? 'text-emerald-500' : 'text-amber-500'}`}>
+                ● {dbUser?.status?.toUpperCase() || 'PENDING'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-[var(--text-muted)] uppercase tracking-widest">Joined</span>
+              <span className="font-black text-[var(--text-main)]">
+                {dbUser?.createdAt ? new Date(dbUser.createdAt).getFullYear() : '2024'}
+              </span>
+            </div>
           </div>
+        </motion.div>
 
-          {dbUser?.status === 'suspended' && dbUser?.suspendReason && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="font-bold text-red-800 mb-2">⚠️ Account Suspended</h3>
-              <p className="text-sm text-red-700">{dbUser.suspendReason}</p>
+        {/* Content Section */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="lg:col-span-2 space-y-6"
+        >
+          {isEditing ? (
+            <div className="glass-card p-8 border-2 border-[var(--primary)]/30">
+              <h3 className="text-xl font-black mb-6 uppercase tracking-widest flex items-center gap-3">
+                <FiEdit3 className="text-[var(--primary)]" /> Modify Identification
+              </h3>
+              <form onSubmit={handleUpdate} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Universal Display Name</label>
+                  <input
+                    type="text"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="modern-input"
+                    placeholder="Enter your name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">High-Res Avatar URL</label>
+                  <input
+                    type="url"
+                    value={photoURL}
+                    onChange={(e) => setPhotoURL(e.target.value)}
+                    className="modern-input"
+                    placeholder="https://images.unsplash.com/your-photo"
+                  />
+                </div>
+                <div className="flex items-center gap-4 pt-4">
+                  <button type="submit" disabled={loading} className="btn-gradient flex-1 flex items-center justify-center gap-2">
+                    {loading ? <span className="loading loading-spinner loading-sm"></span> : <FiSave />} Commit Changes
+                  </button>
+                  <button type="button" onClick={() => setIsEditing(false)} className="btn-outline-clean flex items-center gap-2 px-8">
+                    <FiX /> Abort
+                  </button>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="glass-card p-8 border border-[var(--border)] grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-[var(--text-muted)]">
+                    <FiUser /> <span className="text-[10px] font-black uppercase tracking-widest">Legal Entity</span>
+                  </div>
+                  <p className="text-lg font-bold text-[var(--text-main)] ml-7">{user?.displayName || 'Unset'}</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-[var(--text-muted)]">
+                    <FiMail /> <span className="text-[10px] font-black uppercase tracking-widest">Communication Channel</span>
+                  </div>
+                  <p className="text-lg font-bold text-[var(--text-main)] ml-7">{user?.email}</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-[var(--text-muted)]">
+                    <FiCalendar /> <span className="text-[10px] font-black uppercase tracking-widest">Registration Timestamp</span>
+                  </div>
+                  <p className="text-lg font-bold text-[var(--text-main)] ml-7">
+                    {dbUser?.createdAt ? new Date(dbUser.createdAt).toLocaleDateString() : 'N/A'}
+                  </p>
+                </div>
+              </div>
+
+              {dbUser?.status === 'suspended' && (
+                <div className="glass-card p-8 border-2 border-rose-500/20 bg-rose-500/5">
+                  <h3 className="font-black text-rose-500 uppercase tracking-widest mb-2">⚠️ Access Violation Detected</h3>
+                  <p className="text-sm text-[var(--text-secondary)]">Reason: {dbUser.suspendReason || 'Awaiting review'}</p>
+                </div>
+              )}
             </div>
           )}
-
-          <div>
-            <p className="font-semibold text-gray-700 mb-2">Member Since</p>
-            <p className="text-gray-600">
-              {dbUser?.createdAt ? new Date(dbUser.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }) : 'Recently joined'}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex justify-end mt-8">
-          <button 
-            onClick={handleLogout} 
-            className="btn btn-error"
-          >
-            Logout
-          </button>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

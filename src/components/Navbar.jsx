@@ -1,7 +1,8 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FiLogOut, FiMenu, FiSearch } from 'react-icons/fi';
+import { FiLogOut, FiMenu, FiPackage, FiGrid } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const { user, dbUser, logout } = useAuth();
@@ -15,92 +16,117 @@ const Navbar = () => {
     }
   };
 
-  const beforeLoginLinks = (
-    <>
-      <li><NavLink to="/" className="text-sm font-medium text-gray-700 hover:text-primary-600">HOME</NavLink></li>
-      <li><NavLink to="/products" className="text-sm font-medium text-gray-700 hover:text-primary-600">PRODUCTS</NavLink></li>
-      <li><NavLink to="/about" className="text-sm font-medium text-gray-700 hover:text-primary-600">SERVICES</NavLink></li>
-      <li><NavLink to="/contact" className="text-sm font-medium text-gray-700 hover:text-primary-600">ABOUT US</NavLink></li>
-    </>
-  );
+  const navItemClass = ({ isActive }) =>
+    `text-sm font-bold tracking-tight transition-all duration-300 hover:text-[var(--primary)] ${isActive ? 'text-[var(--primary)]' : 'text-[var(--text-main)]'
+    }`;
 
-  const afterLoginLinks = (
-    <>
-      <li><NavLink to="/" className="text-sm font-medium text-gray-700 hover:text-primary-600">HOME</NavLink></li>
-      <li><NavLink to="/products" className="text-sm font-medium text-gray-700 hover:text-primary-600">PRODUCTS</NavLink></li>
-      <li><NavLink to="/dashboard" className="text-sm font-medium text-gray-700 hover:text-primary-600">DASHBOARD</NavLink></li>
-    </>
+  const desktopLinks = (
+    <ul className="flex items-center space-x-10">
+      <li><NavLink to="/" className={navItemClass}>HOME</NavLink></li>
+      <li><NavLink to="/products" className={navItemClass}>COLLECTION</NavLink></li>
+      {user && <li><NavLink to="/dashboard" className={navItemClass}>DASHBOARD</NavLink></li>}
+      <li><NavLink to="/about" className={navItemClass}>SERVICES</NavLink></li>
+      <li><NavLink to="/blog" className={navItemClass}>BLOG</NavLink></li>
+      <li><NavLink to="/faq" className={navItemClass}>FAQ</NavLink></li>
+      <li><NavLink to="/contact" className={navItemClass}>CONTACT</NavLink></li>
+    </ul>
   );
 
   return (
-    <div className="navbar-clean sticky top-0 z-50 px-6 py-4">
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="navbar-clean">
+      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-gray-900">
-          Garment House
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-hover)] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+            <FiPackage className="text-white text-xl" />
+          </div>
+          <span className="text-2xl font-black text-[var(--text-main)] tracking-tighter">
+            Garment<span className="text-[var(--primary)]">House</span>
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center space-x-8">
-          <ul className="flex items-center space-x-8">
-            {user ? afterLoginLinks : beforeLoginLinks}
-          </ul>
+        <div className="hidden lg:block">
+          {desktopLinks}
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center space-x-4">
-          {/* Search Icon */}
-          {/* <button className="p-2 text-gray-600 hover:text-gray-900">
-            <FiSearch className="w-5 h-5" />
-          </button> */}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
 
           {user ? (
-            <>
+            <div className="flex items-center gap-4">
               <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
-                  <div className="w-8 h-8 rounded-full overflow-hidden">
-                    <img src={user.photoURL || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext x="50%" y="50%" font-size="12" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Photo%3C/text%3E%3C/svg%3E'} alt="User" className="w-full h-full object-cover" />
+                <label tabIndex={0} className="flex items-center gap-3 p-1.5 rounded-2xl hover:bg-[var(--bg-secondary)] border border-transparent hover:border-[var(--border)] cursor-pointer transition-all">
+                  <div className="w-9 h-9 rounded-xl overflow-hidden shadow-inner ring-2 ring-[var(--primary)] ring-offset-2 ring-offset-[var(--bg-card)]">
+                    <img src={user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'} alt="User" className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{user.displayName}</span>
+                  <div className="hidden md:block">
+                    <div className="text-xs font-black text-[var(--text-main)] line-clamp-1">{user.displayName}</div>
+                    <div className="text-[10px] font-bold text-[var(--primary)] uppercase tracking-widest">{dbUser?.role || 'User'}</div>
+                  </div>
                 </label>
-                <ul tabIndex={0} className="menu dropdown-content mt-3 z-[1] p-2 shadow-lg bg-white rounded-lg w-52 border border-gray-200">
-                  <li><Link to="/dashboard/profile" className="text-gray-700 hover:bg-gray-100 rounded-lg p-2"> Profile {user.displayName}</Link></li>
-                  <li><span className="text-xs text-gray-500 px-2 py-1">{dbUser?.role}</span></li>
+                <ul tabIndex={0} className="menu dropdown-content mt-4 z-[100] p-2 shadow-2xl bg-[var(--bg-card)] rounded-2xl w-56 border border-[var(--border)] backdrop-blur-xl">
+                  <li><Link to="/dashboard/profile" className="flex items-center gap-2 p-3 font-bold text-[var(--text-main)] hover:bg-[var(--bg-secondary)] rounded-xl">View Profile</Link></li>
+                  <li><Link to="/dashboard" className="flex items-center gap-2 p-3 font-bold text-[var(--text-main)] hover:bg-[var(--bg-secondary)] rounded-xl">My Dashboard</Link></li>
+                  <div className="border-t border-[var(--border)] my-2"></div>
+                  <li>
+                    <button onClick={handleLogout} className="flex items-center gap-2 p-3 font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl">
+                      <FiLogOut /> Sign Out
+                    </button>
+                  </li>
                 </ul>
               </div>
-              <button onClick={handleLogout} className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
-                <FiLogOut className="w-5 h-5" />
-              </button>
-            </>
+            </div>
           ) : (
-            <>
-              <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-gray-900">
-                Login
+            <div className="hidden md:flex items-center gap-4">
+              <Link to="/login" className="text-sm font-bold text-[var(--text-main)] hover:text-[var(--primary)] transition-colors">
+                Sign In
               </Link>
-              <Link to="/register" className="btn-primary-clean">
+              <Link to="/register" className="btn-primary-clean !py-2.5 !px-6 !text-xs shadow-lg">
                 Get Started
               </Link>
-            </>
+            </div>
           )}
 
           {/* Mobile Menu */}
-          <div className="dropdown lg:hidden">
-            <label tabIndex={0} className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg cursor-pointer">
+          <div className="dropdown dropdown-end lg:hidden">
+            <label tabIndex={0} className="p-2.5 text-[var(--text-main)] hover:bg-[var(--bg-secondary)] rounded-xl border border-[var(--border)] cursor-pointer transition-all block">
               <FiMenu className="w-5 h-5" />
             </label>
-            <ul tabIndex={0} className="menu dropdown-content mt-3 z-[1] p-2 shadow-lg bg-white rounded-lg w-52 border border-gray-200">
-              {user ? afterLoginLinks : beforeLoginLinks}
-              {!user && (
+            <ul tabIndex={0} className="menu dropdown-content mt-4 z-[100] p-3 shadow-2xl bg-[var(--bg-card)] rounded-2xl w-64 border border-[var(--border)]">
+              {user ? (
                 <>
-                  <li><Link to="/login" className="text-gray-700 hover:bg-gray-100 rounded-lg p-2">Login</Link></li>
-                  <li><Link to="/register" className="text-gray-700 hover:bg-gray-100 rounded-lg p-2">Register</Link></li>
+                  <div className="px-4 py-3 mb-2 border-b border-[var(--border)]">
+                    <div className="font-black text-[var(--text-main)]">{user.displayName}</div>
+                    <div className="text-xs text-[var(--primary)] font-bold uppercase">{dbUser?.role}</div>
+                  </div>
+                  <li><NavLink to="/" className="p-3 font-bold text-[var(--text-main)]">HOME</NavLink></li>
+                  <li><NavLink to="/products" className="p-3 font-bold text-[var(--text-main)]">COLLECTION</NavLink></li>
+                  <li><NavLink to="/dashboard" className="p-3 font-bold text-[var(--text-main)]">DASHBOARD</NavLink></li>
+                  <li><NavLink to="/about" className="p-3 font-bold text-[var(--text-main)]">SERVICES</NavLink></li>
+                  <li><NavLink to="/blog" className="p-3 font-bold text-[var(--text-main)]">BLOG</NavLink></li>
+                  <li><NavLink to="/faq" className="p-3 font-bold text-[var(--text-main)]">FAQ</NavLink></li>
+                  <li><NavLink to="/contact" className="p-3 font-bold text-[var(--text-main)]">CONTACT</NavLink></li>
+                </>
+              ) : (
+                <>
+                  <li><NavLink to="/" className="p-3 font-bold text-[var(--text-main)]">HOME</NavLink></li>
+                  <li><NavLink to="/products" className="p-3 font-bold text-[var(--text-main)]">COLLECTION</NavLink></li>
+                  <li><NavLink to="/about" className="p-3 font-bold text-[var(--text-main)]">SERVICES</NavLink></li>
+                  <li><NavLink to="/blog" className="p-3 font-bold text-[var(--text-main)]">BLOG</NavLink></li>
+                  <li><NavLink to="/faq" className="p-3 font-bold text-[var(--text-main)]">FAQ</NavLink></li>
+                  <li><NavLink to="/contact" className="p-3 font-bold text-[var(--text-main)]">CONTACT</NavLink></li>
+                  <div className="border-t border-[var(--border)] my-2"></div>
+                  <li><Link to="/login" className="p-3 font-bold text-[var(--text-main)]">Sign In</Link></li>
+                  <li><Link to="/register" className="p-3 font-bold text-[var(--primary)]">Create Account</Link></li>
                 </>
               )}
             </ul>
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

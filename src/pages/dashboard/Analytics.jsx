@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
+import { FiBox, FiShoppingCart, FiUsers, FiDollarSign, FiActivity, FiPieChart, FiTrendingUp } from 'react-icons/fi';
 
 const Analytics = () => {
   const [stats, setStats] = useState({
@@ -23,196 +25,203 @@ const Analytics = () => {
       });
       setStats(data || { totalProducts: 0, totalOrders: 0, totalUsers: 0, revenue: 0 });
     } catch (error) {
-      console.error('Analytics fetch failed:', error);
-      toast.error('Failed to load analytics');
+      toast.error('Logistics data synchronization failed');
       setStats({ totalProducts: 0, totalOrders: 0, totalUsers: 0, revenue: 0 });
     } finally {
       setLoading(false);
     }
   };
 
-  const StatCard = ({ title, value, icon, color, subtitle }) => (
-    <div className={`card bg-gradient-to-br ${color} shadow-lg hover:shadow-xl transition-shadow`}>
-      <div className="card-body">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="card-title text-sm font-semibold opacity-80">{title}</h3>
-            <p className="text-4xl font-bold mt-2">{value}</p>
-            {subtitle && <p className="text-xs opacity-70 mt-1">{subtitle}</p>}
+  const StatCard = ({ title, value, icon: Icon, color, subtitle, delay = 0 }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className={`glass-card group relative overflow-hidden border border-[var(--border)] rounded-[32px] p-8 hover:border-[var(--primary)]/50 hover:shadow-2xl transition-all duration-500`}
+    >
+      <div className={`absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 bg-gradient-to-br ${color} opacity-[0.03] group-hover:opacity-[0.08] transition-opacity rounded-full`}></div>
+      <div className="flex justify-between items-start relative z-10">
+        <div className="space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--primary)] text-xl border border-[var(--border)] shadow-sm">
+            <Icon />
           </div>
-          <div className="text-4xl">{icon}</div>
+          <div>
+            <h3 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">{title}</h3>
+            <p className="text-4xl font-black text-[var(--text-main)] tracking-tighter mt-1">{value}</p>
+            {subtitle && <p className="text-[10px] font-bold text-[var(--primary)] mt-2 uppercase tracking-wide italic">{subtitle}</p>}
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
-    <div className="w-full">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Analytics Dashboard
-        </h1>
-        <p className="text-gray-500 mt-2">Real-time overview of your business metrics</p>
+    <div className="space-y-8 pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-[var(--text-main)] tracking-tighter flex items-center gap-3">
+            <FiActivity className="text-[var(--primary)]" /> Performance Intelligence
+          </h1>
+          <p className="text-[var(--text-muted)] font-medium text-sm mt-1 uppercase tracking-widest">Global Production & Revenue Metrics</p>
+        </div>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center">
-            <span className="loading loading-spinner loading-lg text-primary"></span>
-            <p className="mt-4 text-gray-500">Loading analytics...</p>
-          </div>
+        <div className="py-40 text-center">
+          <span className="loading loading-spinner text-[var(--primary)] loading-lg"></span>
         </div>
       ) : (
         <>
-          {/* Main Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatCard 
-              title="Total Products" 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatCard
+              title="Catalog Volume"
               value={stats.totalProducts || 0}
-              icon="📦"
-              color="from-blue-400 to-blue-600"
-              subtitle="In inventory"
+              icon={FiBox}
+              color="from-blue-500 to-cyan-500"
+              subtitle="Registered Assets"
+              delay={0.1}
             />
-            <StatCard 
-              title="Total Orders" 
+            <StatCard
+              title="Acquisition Cycles"
               value={stats.totalOrders || 0}
-              icon="🛒"
-              color="from-purple-400 to-purple-600"
-              subtitle="All time"
+              icon={FiShoppingCart}
+              color="from-purple-500 to-pink-500"
+              subtitle="Completed Transactions"
+              delay={0.2}
             />
-            <StatCard 
-              title="Total Users" 
+            <StatCard
+              title="Authorized Entities"
               value={stats.totalUsers || 0}
-              icon="👥"
-              color="from-green-400 to-green-600"
-              subtitle="Registered"
+              icon={FiUsers}
+              color="from-emerald-500 to-teal-500"
+              subtitle="Active Network"
+              delay={0.3}
             />
-            <StatCard 
-              title="Revenue" 
+            <StatCard
+              title="Global Valuation"
               value={`$${(stats.revenue || 0).toLocaleString()}`}
-              icon="💰"
-              color="from-orange-400 to-orange-600"
-              subtitle="Total earnings"
+              icon={FiDollarSign}
+              color="from-orange-500 to-red-500"
+              subtitle="Gross Revenue"
+              delay={0.4}
             />
           </div>
 
-          {/* Detailed Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Products Card */}
-            <div className="card bg-gradient-to-br from-blue-50 to-blue-100 shadow-xl border border-blue-200">
-              <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="card-title text-2xl text-blue-900">📦 Products</h2>
-                    <p className="text-blue-600 text-sm">Total items in catalog</p>
-                  </div>
-                  <div className="badge badge-lg bg-blue-500 text-white">{stats.totalProducts || 0}</div>
-                </div>
-                <div className="divider my-2 bg-blue-200"></div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-blue-700 font-medium">Inventory Status</span>
-                    <progress className="progress progress-info w-32" value={(stats.totalProducts || 0) * 2} max="100"></progress>
-                  </div>
-                  <p className="text-xs text-blue-600">Items actively managed in system</p>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="glass-card border border-[var(--border)] rounded-[40px] p-8 space-y-8"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-black text-[var(--text-main)] tracking-tighter flex items-center gap-3">
+                  <FiPieChart className="text-[var(--primary)]" /> Production Distribution
+                </h2>
+                <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest bg-[var(--bg-secondary)] px-3 py-1 rounded-full">Automated Log</span>
               </div>
-            </div>
 
-            {/* Orders Card */}
-            <div className="card bg-gradient-to-br from-purple-50 to-purple-100 shadow-xl border border-purple-200">
-              <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="card-title text-2xl text-purple-900">🛒 Orders</h2>
-                    <p className="text-purple-600 text-sm">Customer purchases</p>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-bold text-[var(--text-secondary)]">
+                    <span className="uppercase tracking-widest">Inventory Saturation</span>
+                    <span>{Math.min(100, (stats.totalProducts || 0) * 2)}%</span>
                   </div>
-                  <div className="badge badge-lg bg-purple-500 text-white">{stats.totalOrders || 0}</div>
-                </div>
-                <div className="divider my-2 bg-purple-200"></div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-purple-700 font-medium">Order Volume</span>
-                    <progress className="progress progress-secondary w-32" value={(stats.totalOrders || 0) * 3} max="100"></progress>
+                  <div className="h-5 bg-[var(--bg-secondary)] rounded-full overflow-hidden p-1 border border-[var(--border)]">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${Math.min(100, (stats.totalProducts || 0) * 2)}%` }}
+                      className="h-full bg-gradient-to-r from-blue-500 to-[var(--primary)] rounded-full shadow-[0_0_10px_rgba(59,130,246,0.3)]"
+                    />
                   </div>
-                  <p className="text-xs text-purple-600">Total transactions processed</p>
                 </div>
-              </div>
-            </div>
 
-            {/* Users Card */}
-            <div className="card bg-gradient-to-br from-green-50 to-green-100 shadow-xl border border-green-200">
-              <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="card-title text-2xl text-green-900">👥 Users</h2>
-                    <p className="text-green-600 text-sm">Registered members</p>
+                <div className="grid grid-cols-3 gap-4 pt-4">
+                  <div className="bg-[var(--bg-secondary)] rounded-2xl p-4 border border-[var(--border)] text-center">
+                    <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest mb-1">Stockage</p>
+                    <p className="text-lg font-black text-[var(--text-main)]">{stats.totalProducts}</p>
                   </div>
-                  <div className="badge badge-lg bg-green-500 text-white">{stats.totalUsers || 0}</div>
-                </div>
-                <div className="divider my-2 bg-green-200"></div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-green-700 font-medium">User Growth</span>
-                    <progress className="progress progress-success w-32" value={(stats.totalUsers || 0) * 4} max="100"></progress>
+                  <div className="bg-[var(--bg-secondary)] rounded-2xl p-4 border border-[var(--border)] text-center">
+                    <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest mb-1">Growth</p>
+                    <p className="text-lg font-black text-emerald-500">+12%</p>
                   </div>
-                  <p className="text-xs text-green-600">Active user accounts</p>
+                  <div className="bg-[var(--bg-secondary)] rounded-2xl p-4 border border-[var(--border)] text-center">
+                    <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest mb-1">Rating</p>
+                    <p className="text-lg font-black text-amber-500">4.9</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Revenue Card */}
-            <div className="card bg-gradient-to-br from-orange-50 to-orange-100 shadow-xl border border-orange-200">
-              <div className="card-body">
-                <div className="flex items-center justify-between">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="glass-card border border-[var(--border)] rounded-[40px] p-8 space-y-8"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-black text-[var(--text-main)] tracking-tighter flex items-center gap-3">
+                  <FiTrendingUp className="text-[var(--primary)]" /> Commercial Liquidity
+                </h2>
+                <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest bg-[var(--bg-secondary)] px-3 py-1 rounded-full">Real-time Data</span>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-end justify-between">
                   <div>
-                    <h2 className="card-title text-2xl text-orange-900">💰 Revenue</h2>
-                    <p className="text-orange-600 text-sm">Total earnings</p>
+                    <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Cumulative Earnings</p>
+                    <p className="text-5xl font-black text-[var(--text-main)] tracking-tighter">${(stats.revenue || 0).toLocaleString()}</p>
                   </div>
-                  <div className="badge badge-lg bg-orange-500 text-white">${(stats.revenue || 0).toLocaleString()}</div>
+                  <div className="text-right">
+                    <p className="text-xs font-black text-emerald-500 flex items-center gap-1">
+                      <FiTrendingUp /> +24.8%
+                    </p>
+                    <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest">Vs Last Projection</p>
+                  </div>
                 </div>
-                <div className="divider my-2 bg-orange-200"></div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-orange-700 font-medium">Financial Status</span>
-                    <progress className="progress progress-warning w-32" value="80" max="100"></progress>
-                  </div>
-                  <p className="text-xs text-orange-600">All time revenue accumulated</p>
+
+                <div className="h-24 bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border)] flex items-center justify-center relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--primary)]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest italic group-hover:text-[var(--primary)] transition-colors">Visual analysis protocol active</p>
+
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--primary)] to-transparent opacity-30"></div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Summary Section */}
-          <div className="card bg-gradient-to-r from-primary/10 to-secondary/10 shadow-lg mt-8">
-            <div className="card-body">
-              <h3 className="card-title mb-4">📊 Summary</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <p className="text-gray-500 text-sm">Total Products</p>
-                  <p className="text-2xl font-bold text-primary mt-1">{stats.totalProducts || 0}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-gray-500 text-sm">Total Orders</p>
-                  <p className="text-2xl font-bold text-secondary mt-1">{stats.totalOrders || 0}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-gray-500 text-sm">Total Users</p>
-                  <p className="text-2xl font-bold text-accent mt-1">{stats.totalUsers || 0}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-gray-500 text-sm">Total Revenue</p>
-                  <p className="text-2xl font-bold text-success mt-1">${(stats.revenue || 0).toLocaleString()}</p>
-                </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass-card !bg-[var(--bg-secondary)] border border-[var(--border)] rounded-[40px] p-8 lg:p-12 relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--primary)] to-transparent"></div>
+            <h3 className="text-sm font-black text-[var(--text-muted)] uppercase tracking-widest mb-10 text-center">Executive Summary Matrix</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center space-y-2">
+                <FiBox className="text-2xl text-[var(--text-muted)] mx-auto mb-4" />
+                <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest">Asset Index</p>
+                <p className="text-3xl font-black text-[var(--text-main)] tracking-tighter">{stats.totalProducts || 0}</p>
+              </div>
+              <div className="text-center space-y-2">
+                <FiShoppingCart className="text-2xl text-[var(--text-muted)] mx-auto mb-4" />
+                <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest">Transaction Flow</p>
+                <p className="text-3xl font-black text-[var(--text-main)] tracking-tighter">{stats.totalOrders || 0}</p>
+              </div>
+              <div className="text-center space-y-2">
+                <FiUsers className="text-2xl text-[var(--text-muted)] mx-auto mb-4" />
+                <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest">Entity Scale</p>
+                <p className="text-3xl font-black text-[var(--text-main)] tracking-tighter">{stats.totalUsers || 0}</p>
+              </div>
+              <div className="text-center space-y-2">
+                <FiDollarSign className="text-2xl text-[var(--primary)] mx-auto mb-4" />
+                <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest">Terminal Revenue</p>
+                <p className="text-3xl font-black text-[var(--primary)] tracking-tighter">${(stats.revenue || 0).toLocaleString()}</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </>
       )}
     </div>
   );
 };
-;
 
 export default Analytics;

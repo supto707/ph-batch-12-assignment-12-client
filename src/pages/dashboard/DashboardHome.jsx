@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { FiPackage, FiShoppingCart, FiUsers, FiTrendingUp } from 'react-icons/fi';
+import { FiPackage, FiShoppingCart, FiUsers, FiTrendingUp, FiArrowRight, FiUser, FiBarChart2, FiPieChart, FiActivity } from 'react-icons/fi';
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, PieChart, Pie, Cell, Legend
+} from 'recharts';
 
 const DashboardHome = () => {
   const { dbUser, user } = useAuth();
@@ -11,275 +15,285 @@ const DashboardHome = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (dbUser?.role === 'admin') {
-      fetchAnalytics();
-    } else {
-      setLoading(false);
-    }
+    fetchData();
   }, [dbUser]);
 
-  const fetchAnalytics = async () => {
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/analytics`, {
-        withCredentials: true
-      });
-      setStats(data);
+      if (dbUser?.role === 'admin') {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/analytics`, { withCredentials: true });
+        setStats(data);
+      } else if (dbUser?.role === 'buyer') {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/orders`, { withCredentials: true });
+        const myOrders = data.filter(o => o.userEmail === user?.email);
+        setStats({
+          totalOrders: myOrders.length,
+          spending: myOrders.reduce((acc, curr) => acc + (curr.total || 0), 0),
+          statusDistribution: [
+            { name: 'Pending', value: myOrders.filter(o => o.status === 'pending').length },
+            { name: 'Approved', value: myOrders.filter(o => o.status === 'approved').length },
+            { name: 'Delivered', value: myOrders.filter(o => o.status === 'delivered').length },
+          ].filter(s => s.value > 0)
+        });
+      } else if (dbUser?.role === 'manager') {
+        const { data: products } = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+        const myProducts = Array.isArray(products.products) ? products.products.filter(p => p.createdBy === user?.email) : [];
+        setStats({
+          totalProducts: myProducts.length,
+          outOfStock: myProducts.filter(p => p.stock <= 0).length,
+          categoryStats: Object.entries(
+            myProducts.reduce((acc, p) => ({ ...acc, [p.category]: (acc[p.category] || 0) + 1 }), {})
+          ).map(([name, value]) => ({ name, value }))
+        });
+      }
     } catch (error) {
-      console.error('Failed to fetch analytics');
+      // Failed to fetch dashboard data
     } finally {
       setLoading(false);
     }
   };
 
-  const StatCard = ({ icon: Icon, label, value, color, onClick }) => (
-    <div 
-      onClick={onClick}
-      className={`card bg-gradient-to-br ${color} shadow-lg hover:shadow-xl transition-all cursor-pointer hover:scale-105`}
-    >
-      <div className="card-body">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm opacity-80 font-medium">{label}</p>
-            <p className="text-3xl font-bold mt-2">{value}</p>
-          </div>
-          <Icon className="w-12 h-12 opacity-80" />
-        </div>
-      </div>
-    </div>
-  );
+  const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
-  const QuickLink = ({ icon: Icon, label, description, onClick }) => (
+  const StatCard = ({ icon: Icon, label, value, color, onClick }) => (
     <div
       onClick={onClick}
-      className="card bg-white border border-gray-200 hover:border-primary hover:shadow-lg transition-all cursor-pointer"
+      className={`glass-card p-6 border-l-4 ${color} hover:translate-y-[-4px] transition-all cursor-pointer shadow-sm`}
     >
-      <div className="card-body items-center text-center">
-        <Icon className="w-8 h-8 text-primary mb-2" />
-        <h3 className="font-semibold text-gray-900">{label}</h3>
-        <p className="text-xs text-gray-600">{description}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">{label}</p>
+          <p className="text-3xl font-black text-[var(--text-main)] tracking-tight">{value}</p>
+        </div>
+        <div className={`p-3 rounded-2xl bg-opacity-10 ${color.replace('border-', 'bg-')} bg-current`}>
+          <Icon className="w-6 h-6 opacity-80" />
+        </div>
       </div>
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <span className="loading loading-spinner loading-lg text-[var(--primary)]"></span>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full">
+    <div className="w-full space-y-10 animate-fade-in pb-20">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">
-          Welcome back, <span className="text-primary">{user?.displayName || 'User'}</span>! 👋
-        </h1>
-        <p className="text-gray-600 mt-2">
-          {dbUser?.role === 'admin' && 'Manage your platform and view analytics'}
-          {dbUser?.role === 'manager' && 'Manage your products and orders'}
-          {dbUser?.role === 'buyer' && 'Track your orders and purchases'}
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-black text-[var(--text-main)] tracking-tight">
+            Terminal <span className="gradient-text">Overview</span>
+          </h1>
+          <p className="text-[var(--text-secondary)] font-medium mt-1">
+            Logged in as <span className="text-[var(--primary)] font-bold">{dbUser?.role?.toUpperCase()}</span> • {user?.email}
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <Link to="/dashboard/profile" className="btn-outline-clean flex items-center gap-2">
+            <FiUser /> Profile Settings
+          </Link>
+        </div>
       </div>
 
-      {/* Admin Dashboard */}
+      {/* ADMIN VIEW */}
       {dbUser?.role === 'admin' && (
         <>
-          {/* Stats Section */}
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <span className="loading loading-spinner loading-lg"></span>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <StatCard
-                  icon={FiPackage}
-                  label="Total Products"
-                  value={stats?.totalProducts || 0}
-                  color="from-blue-400 to-blue-600"
-                  onClick={() => navigate('/dashboard/all-products')}
-                />
-                <StatCard
-                  icon={FiShoppingCart}
-                  label="Total Orders"
-                  value={stats?.totalOrders || 0}
-                  color="from-purple-400 to-purple-600"
-                  onClick={() => navigate('/dashboard/all-orders')}
-                />
-                <StatCard
-                  icon={FiUsers}
-                  label="Total Users"
-                  value={stats?.totalUsers || 0}
-                  color="from-green-400 to-green-600"
-                  onClick={() => navigate('/dashboard/manage-users')}
-                />
-                <StatCard
-                  icon={FiTrendingUp}
-                  label="Total Revenue"
-                  value={`$${(stats?.revenue || 0).toLocaleString()}`}
-                  color="from-orange-400 to-orange-600"
-                  onClick={() => navigate('/dashboard/analytics')}
-                />
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatCard icon={FiUsers} label="Total Workforce" value={stats?.totalUsers || 0} color="border-indigo-500" onClick={() => navigate('/dashboard/manage-users')} />
+            <StatCard icon={FiPackage} label="Garment Inventory" value={stats?.totalProducts || 0} color="border-emerald-500" onClick={() => navigate('/dashboard/all-products')} />
+            <StatCard icon={FiShoppingCart} label="Global Orders" value={stats?.totalOrders || 0} color="border-amber-500" onClick={() => navigate('/dashboard/all-orders')} />
+            <StatCard icon={FiTrendingUp} label="Net Yield" value={`$${(stats?.revenue || 0).toLocaleString()}`} color="border-rose-500" onClick={() => navigate('/dashboard/analytics')} />
+          </div>
 
-              {/* Quick Links */}
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <QuickLink
-                    icon={FiUsers}
-                    label="Manage Users"
-                    description="View and manage all users"
-                    onClick={() => navigate('/dashboard/manage-users')}
-                  />
-                  <QuickLink
-                    icon={FiPackage}
-                    label="All Products"
-                    description="Browse all products"
-                    onClick={() => navigate('/dashboard/all-products')}
-                  />
-                  <QuickLink
-                    icon={FiShoppingCart}
-                    label="All Orders"
-                    description="Monitor orders"
-                    onClick={() => navigate('/dashboard/all-orders')}
-                  />
-                  <QuickLink
-                    icon={FiTrendingUp}
-                    label="Analytics"
-                    description="View detailed analytics"
-                    onClick={() => navigate('/dashboard/analytics')}
-                  />
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="glass-card p-8 border border-[var(--border)]">
+              <div className="flex items-center gap-3 mb-8">
+                <FiActivity className="text-[var(--primary)]" />
+                <h3 className="font-black text-lg uppercase tracking-wider">User Acquisition Growth</h3>
               </div>
-            </>
-          )}
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={stats?.userGrowth}>
+                    <defs>
+                      <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                    <XAxis dataKey="month" stroke="var(--text-muted)" fontSize={10} fontWeight="bold" />
+                    <YAxis stroke="var(--text-muted)" fontSize={10} fontWeight="bold" />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)', borderRadius: '16px', fontWeight: 'bold' }}
+                      itemStyle={{ color: 'var(--primary)' }}
+                    />
+                    <Area type="monotone" dataKey="count" stroke="#6366f1" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="glass-card p-8 border border-[var(--border)]">
+              <div className="flex items-center gap-3 mb-8">
+                <FiBarChart2 className="text-emerald-500" />
+                <h3 className="font-black text-lg uppercase tracking-wider">Revenue Synthesis</h3>
+              </div>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={stats?.salesStats}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                    <XAxis dataKey="month" stroke="var(--text-muted)" fontSize={10} fontWeight="bold" />
+                    <YAxis stroke="var(--text-muted)" fontSize={10} fontWeight="bold" />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)', borderRadius: '16px', fontWeight: 'bold' }}
+                    />
+                    <Bar dataKey="revenue" fill="#10b981" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="glass-card p-8 border border-[var(--border)]">
+              <div className="flex items-center gap-3 mb-8">
+                <FiPieChart className="text-amber-500" />
+                <h3 className="font-black text-lg uppercase tracking-wider">Catalogue Segmentation</h3>
+              </div>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={stats?.categoryStats}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {stats?.categoryStats?.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)', borderRadius: '16px', fontWeight: 'bold' }}
+                    />
+                    <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="glass-card p-8 border border-[var(--border)] flex flex-col justify-center">
+              <h3 className="text-2xl font-black mb-4">Strategic <span className="gradient-text">Commands</span></h3>
+              <p className="text-[var(--text-secondary)] text-sm mb-8">Deploy administrative operations across the ecosystem.</p>
+              <div className="grid grid-cols-2 gap-4">
+                <button onClick={() => navigate('/dashboard/manage-users')} className="btn-outline-clean flex flex-col items-center p-6 gap-2 !border-[var(--border)]">
+                  <FiUsers size={24} />
+                  <span className="text-[10px] uppercase font-black">Users</span>
+                </button>
+                <button onClick={() => navigate('/dashboard/all-products')} className="btn-outline-clean flex flex-col items-center p-6 gap-2 !border-[var(--border)]">
+                  <FiPackage size={24} />
+                  <span className="text-[10px] uppercase font-black">Products</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </>
       )}
 
-      {/* Manager Dashboard */}
+      {/* MANAGER VIEW */}
       {dbUser?.role === 'manager' && (
         <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* Quick Links */}
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <QuickLink
-                  icon={FiPackage}
-                  label="Add Product"
-                  description="Create new product"
-                  onClick={() => navigate('/dashboard/add-product')}
-                />
-                <QuickLink
-                  icon={FiPackage}
-                  label="Manage Products"
-                  description="Edit your products"
-                  onClick={() => navigate('/dashboard/manage-products')}
-                />
-                <QuickLink
-                  icon={FiShoppingCart}
-                  label="Pending Orders"
-                  description="Review new orders"
-                  onClick={() => navigate('/dashboard/pending-orders')}
-                />
-                <QuickLink
-                  icon={FiShoppingCart}
-                  label="Approved Orders"
-                  description="View approved orders"
-                  onClick={() => navigate('/dashboard/approved-orders')}
-                />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <StatCard icon={FiPackage} label="Your Active Items" value={stats?.totalProducts || 0} color="border-primary" onClick={() => navigate('/dashboard/manage-products')} />
+            <StatCard icon={FiActivity} label="Supply Alerts" value={stats?.outOfStock || 0} color="border-rose-500" onClick={() => navigate('/dashboard/manage-products')} />
+            <StatCard icon={FiShoppingCart} label="Process Pipeline" value="Active" color="border-amber-500" onClick={() => navigate('/dashboard/pending-orders')} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="glass-card p-8 border border-[var(--border)]">
+              <h3 className="font-black text-lg mb-8 uppercase tracking-wider">Production Category Split</h3>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stats?.categoryStats} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={100}>
+                      {stats?.categoryStats?.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderRadius: '16px' }} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Welcome Card */}
-            <div className="card bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
-              <div className="card-body">
-                <h3 className="card-title text-xl">📦 Product Management</h3>
-                <p className="text-sm text-gray-700">
-                  Manage your product inventory, handle customer orders, and track shipments all in one place. Make sure to keep your product information up-to-date!
-                </p>
-                <div className="mt-4 space-y-2">
-                  <p className="text-xs text-gray-600">
-                    <strong>📝 Add Product:</strong> Create and list new items
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <strong>✏️ Manage:</strong> Edit prices, inventory, and details
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <strong>📦 Orders:</strong> Process pending orders as they come in
-                  </p>
-                </div>
+            <div className="glass-card p-8 border border-[var(--border)] flex flex-col justify-center bg-gradient-to-br from-[var(--primary)]/5 to-transparent">
+              <h3 className="text-2xl font-black mb-4">Operations <span className="gradient-text">Node</span></h3>
+              <p className="text-[var(--text-secondary)] mb-8 font-medium">Coordinate your specialized production lines.</p>
+              <div className="space-y-3">
+                <Link to="/dashboard/add-product" className="btn-gradient w-full flex items-center justify-center gap-2">
+                  <FiPlus /> New Production Batch
+                </Link>
+                <Link to="/dashboard/pending-orders" className="btn-outline-clean w-full flex items-center justify-center gap-2">
+                  Review Approvals <FiArrowRight />
+                </Link>
               </div>
             </div>
           </div>
         </>
       )}
 
-      {/* Buyer Dashboard */}
+      {/* BUYER VIEW */}
       {dbUser?.role === 'buyer' && (
         <>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <QuickLink
-              icon={FiShoppingCart}
-              label="My Orders"
-              description="View your purchases"
-              onClick={() => navigate('/dashboard/my-orders')}
-            />
-            
-            {/* Welcome Card */}
-            <div className="lg:col-span-2 card bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
-              <div className="card-body">
-                <h3 className="card-title text-xl">🛍️ Welcome to Your Dashboard</h3>
-                <p className="text-sm text-gray-700">
-                  Track your orders, manage your profile, and stay updated on your purchases. Need help? Check out our FAQs or contact our support team.
-                </p>
-                <div className="mt-4 space-y-2">
-                  <p className="text-xs text-gray-600">
-                    <strong>📦 Track Orders:</strong> Monitor delivery status in real-time
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <strong>👤 Profile:</strong> Update your personal information anytime
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <strong>💳 Safe Shopping:</strong> Secure checkout with multiple payment options
-                  </p>
-                </div>
-                <div className="card-actions justify-start mt-4">
-                  <button className="btn btn-sm btn-primary" onClick={() => navigate('/products')}>
-                    Continue Shopping
-                  </button>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <StatCard icon={FiShoppingCart} label="Total Acquisitions" value={stats?.totalOrders || 0} color="border-primary" onClick={() => navigate('/dashboard/my-orders')} />
+            <StatCard icon={FiTrendingUp} label="Total Investment" value={`$${(stats?.spending || 0).toLocaleString()}`} color="border-emerald-500" onClick={() => navigate('/dashboard/my-orders')} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="glass-card p-8 border border-[var(--border)]">
+              <h3 className="font-black text-lg mb-8 uppercase tracking-wider">Order Status Tracking</h3>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stats?.statusDistribution} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={90} paddingAngle={10}>
+                      {stats?.statusDistribution?.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
+            </div>
+
+            <div className="glass-card p-8 border border-[var(--border)] flex flex-col justify-center">
+              <div className="w-16 h-16 bg-[var(--primary)]/10 rounded-3xl flex items-center justify-center text-[var(--primary)] mb-6">
+                <FiPackage size={32} />
+              </div>
+              <h3 className="text-2xl font-black mb-4">Acquisition <span className="gradient-text">Protocol</span></h3>
+              <p className="text-[var(--text-secondary)] mb-8 font-medium">Continue your procurement cycles by exploring the global catalogue.</p>
+              <Link to="/products" className="btn-gradient !py-4 flex items-center justify-center gap-3">
+                Explore All Garments <FiArrowRight />
+              </Link>
             </div>
           </div>
         </>
       )}
-
-      {/* Info Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-        <div className="card bg-white border border-gray-200">
-          <div className="card-body">
-            <h3 className="card-title text-lg">❓ Need Help?</h3>
-            <p className="text-sm text-gray-600">Check our FAQ or contact support for assistance with your account.</p>
-          </div>
-        </div>
-
-        <div className="card bg-white border border-gray-200">
-          <div className="card-body">
-            <h3 className="card-title text-lg">⚙️ Settings</h3>
-            <p className="text-sm text-gray-600">Update your profile information and preferences from your account settings.</p>
-            <div className="card-actions justify-start mt-2">
-              <button className="btn btn-sm btn-ghost" onClick={() => navigate('/dashboard/profile')}>
-                Go to Profile
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="card bg-white border border-gray-200">
-          <div className="card-body">
-            <h3 className="card-title text-lg">📱 Mobile Friendly</h3>
-            <p className="text-sm text-gray-600">Access your dashboard on any device with our mobile-responsive design.</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
 
 export default DashboardHome;
+
+const FiPlus = () => (
+  <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+);

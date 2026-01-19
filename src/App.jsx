@@ -25,6 +25,10 @@ import Analytics from './pages/dashboard/Analytics';
 import DashboardHome from './pages/dashboard/DashboardHome';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Blog from './pages/Blog';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -39,19 +43,21 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/products" element={<AllProducts />} />
-              <Route path="/products/:id" element={
-                <PrivateRoute><ProductDetails /></PrivateRoute>
-              } />
+              <Route path="/products/:id" element={<ProductDetails />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/blog" element={<Blog />} />
               <Route path="*" element={<NotFound />} />
-              
+
               <Route path="/dashboard" element={
                 <PrivateRoute><DashboardLayout /></PrivateRoute>
               }>
                 <Route index element={<DashboardHome />} />
                 <Route path="profile" element={<Profile />} />
-                
+
                 <Route path="manage-users" element={
                   <RoleRoute allowedRoles={['admin']}><ManageUsers /></RoleRoute>
                 } />
@@ -64,7 +70,7 @@ function App() {
                 <Route path="analytics" element={
                   <RoleRoute allowedRoles={['admin']}><Analytics /></RoleRoute>
                 } />
-                
+
                 <Route path="add-product" element={
                   <RoleRoute allowedRoles={['manager']} requireApproved={true}><AddProduct /></RoleRoute>
                 } />
@@ -77,7 +83,7 @@ function App() {
                 <Route path="approved-orders" element={
                   <RoleRoute allowedRoles={['manager']} requireApproved={true}><ApprovedOrders /></RoleRoute>
                 } />
-                
+
                 <Route path="my-orders" element={
                   <RoleRoute allowedRoles={['buyer']}><MyOrders /></RoleRoute>
                 } />

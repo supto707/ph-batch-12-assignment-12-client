@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiCheckCircle, FiTruck, FiMapPin, FiCalendar, FiPlus, FiEye, FiActivity, FiUser, FiPackage, FiInfo, FiX } from 'react-icons/fi';
 
 const ApprovedOrders = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [trackingData, setTrackingData] = useState({
     status: 'Cutting Completed',
     location: '',
@@ -17,30 +20,22 @@ const ApprovedOrders = () => {
   }, []);
 
   const fetchOrders = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/orders`, {
         params: { status: 'approved' },
         withCredentials: true
       });
-      setOrders(data);
+      setOrders(Array.isArray(data) ? data : []);
     } catch (error) {
-      toast.error('Failed to fetch orders');
+      toast.error('Failed to sync approved registry');
     }
+    setLoading(false);
   };
 
   const handleAddTracking = async () => {
     if (!trackingData.location.trim()) {
-      toast.error('Please enter location');
-      return;
-    }
-
-    if (!trackingData.status.trim()) {
-      toast.error('Please select status');
-      return;
-    }
-
-    if (!trackingData.date) {
-      toast.error('Please select date and time');
+      toast.error('Logistics coordinate required');
       return;
     }
 
@@ -59,102 +54,127 @@ const ApprovedOrders = () => {
         payload,
         { withCredentials: true }
       );
-      
-      toast.success('✓ Tracking info added successfully');
-      
+
+      toast.success('Logistics update synchronized');
       setTrackingData({
         status: 'Cutting Completed',
         location: '',
         note: '',
         date: new Date().toISOString().slice(0, 16)
       });
-      
       setSelectedOrder(null);
       document.getElementById('tracking_modal').close();
       fetchOrders();
     } catch (error) {
-      console.error('Tracking error:', error);
-      toast.error(error.response?.data?.message || 'Failed to add tracking');
+      toast.error('Synchronization failed');
     }
   };
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold mb-2 text-black">Approved Orders</h1>
-      <p className="text-gray-600 mb-6">Manage orders and add tracking updates</p>
-
-      <div className="overflow-x-auto">
-        <table className="table border">
-          <thead>
-            <tr className='text-black'>
-              <th>Order ID</th>
-              <th>User</th>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Approved Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map(order => (
-              <tr key={order._id}>
-                <td>{order._id.slice(-8)}</td>
-                <td>{order.userEmail}</td>
-                <td>{order.productName}</td>
-                <td>{order.quantity}</td>
-                <td>{order.approvedAt ? new Date(order.approvedAt).toLocaleDateString() : 'N/A'}</td>
-                <td>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => {
-                        setSelectedOrder(order);
-                        document.getElementById('tracking_modal').showModal();
-                      }}
-                      className="btn btn-primary btn-xs"
-                    >
-                      Add Tracking
-                    </button>
-                    <button 
-                      onClick={() => {
-                        setSelectedOrder(order);
-                        document.getElementById(`view_modal_${order._id}`).showModal();
-                      }}
-                      className="btn btn-info btn-xs"
-                    >
-                      View Tracking
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="space-y-8 pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-[var(--text-main)] tracking-tighter flex items-center gap-3">
+            <FiCheckCircle className="text-emerald-500" /> Active Production
+          </h1>
+          <p className="text-[var(--text-muted)] font-medium text-sm mt-1 uppercase tracking-widest">Orders in Fulfillment Pipeline</p>
+        </div>
       </div>
 
-      {orders.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-xl opacity-60">No approved orders</p>
+      <div className="glass-card rounded-3xl overflow-hidden border border-[var(--border)] shadow-2xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-[var(--bg-secondary)] border-b border-[var(--border)]">
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Order Reference</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Entity Source</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Asset Designation</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Volume</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Verified At</th>
+                <th className="p-6 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest text-right">Fulfillment Logs</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--border)]">
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="p-20 text-center">
+                    <span className="loading loading-spinner text-[var(--primary)] loading-lg"></span>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {orders.length > 0 ? (
+                    orders.map((order, idx) => (
+                      <motion.tr
+                        key={order._id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="hover:bg-[var(--primary)]/5 transition-colors group"
+                      >
+                        <td className="p-6 font-black text-[var(--text-main)]">#{order._id.slice(-8).toUpperCase()}</td>
+                        <td className="p-6 text-xs font-bold text-[var(--text-secondary)]">{order.userEmail}</td>
+                        <td className="p-6 font-bold text-[var(--text-main)]">{order.productName}</td>
+                        <td className="p-6 font-black text-[var(--text-muted)]">{order.quantity} Units</td>
+                        <td className="p-6 text-xs font-bold text-[var(--text-muted)]">{order.approvedAt ? new Date(order.approvedAt).toLocaleDateString() : 'N/A'}</td>
+                        <td className="p-6">
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                document.getElementById('tracking_modal').showModal();
+                              }}
+                              className="p-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white hover:border-[var(--primary)] transition-all shadow-sm"
+                              title="Add Tracking Protocol"
+                            >
+                              <FiPlus />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                document.getElementById(`view_modal_${order._id}`).showModal();
+                              }}
+                              className="p-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--primary)] hover:text-white hover:border-[var(--primary)] transition-all shadow-sm"
+                              title="Inspection Logs"
+                            >
+                              <FiEye />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" className="p-20 text-center">
+                        <FiTruck className="mx-auto text-4xl text-[var(--text-muted)] mb-4" />
+                        <p className="text-[var(--text-secondary)] font-bold italic">No active fulfillment cycles found.</p>
+                      </td>
+                    </tr>
+                  )}
+                </>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
 
-      <dialog id="tracking_modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box bg-white max-w-lg">
-          <button 
-            onClick={() => document.getElementById('tracking_modal').close()}
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          >✕</button>
-          
-          <h3 className="font-bold text-2xl mb-6 text-gray-900">📍 Add Tracking Update</h3>
-          
-          <div className="space-y-5">
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Status *</span></label>
+      <dialog id="tracking_modal" className="modal backdrop-blur-md">
+        <div className="modal-box bg-[var(--bg-card)] border border-[var(--border)] rounded-[40px] p-0 overflow-hidden shadow-2xl max-w-xl">
+          <div className="bg-[var(--bg-secondary)] p-8 border-b border-[var(--border)] flex justify-between items-center">
+            <h3 className="font-black text-2xl text-[var(--text-main)] tracking-tighter">Logistics Synchronization</h3>
+            <button onClick={() => document.getElementById('tracking_modal').close()} className="text-[var(--text-muted)] hover:text-red-500 transition-colors">
+              <FiX size={24} />
+            </button>
+          </div>
+
+          <div className="p-8 space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Fulfillment Status</label>
               <select
                 value={trackingData.status}
-                onChange={(e) => setTrackingData({...trackingData, status: e.target.value})}
-                className="select select-bordered w-full border-2 border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition rounded-lg"
+                onChange={(e) => setTrackingData({ ...trackingData, status: e.target.value })}
+                className="modern-input appearance-none font-bold"
               >
-                <option value="">Select Status</option>
                 <option>Cutting Completed</option>
                 <option>Sewing Started</option>
                 <option>Finishing</option>
@@ -165,79 +185,108 @@ const ApprovedOrders = () => {
               </select>
             </div>
 
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Location *</span></label>
-              <input
-                type="text"
-                value={trackingData.location}
-                onChange={(e) => setTrackingData({...trackingData, location: e.target.value})}
-                className="input w-full border-2 border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition rounded-lg"
-                placeholder="e.g., Factory Floor A"
-              />
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Coordinate Location</label>
+              <div className="relative">
+                <FiMapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                <input
+                  type="text"
+                  value={trackingData.location}
+                  onChange={(e) => setTrackingData({ ...trackingData, location: e.target.value })}
+                  className="modern-input !pl-12"
+                  placeholder="e.g., Sector-7 Facility"
+                />
+              </div>
             </div>
 
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Note (optional)</span></label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Protocol Notes</label>
               <textarea
                 value={trackingData.note}
-                onChange={(e) => setTrackingData({...trackingData, note: e.target.value})}
-                className="textarea w-full border-2 border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none rounded-lg"
-                rows="3"
-                placeholder="Additional notes..."
+                onChange={(e) => setTrackingData({ ...trackingData, note: e.target.value })}
+                className="modern-input !h-24 resize-none"
+                placeholder="Additional fulfillment details..."
               />
             </div>
 
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold text-gray-700">Date & Time *</span></label>
-              <input
-                type="datetime-local"
-                value={trackingData.date}
-                onChange={(e) => setTrackingData({...trackingData, date: e.target.value})}
-                className="input w-full border-2 border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition rounded-lg"
-              />
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest ml-1">Timeline Timestamp</label>
+              <div className="relative">
+                <FiCalendar className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                <input
+                  type="datetime-local"
+                  value={trackingData.date}
+                  onChange={(e) => setTrackingData({ ...trackingData, date: e.target.value })}
+                  className="modern-input !pl-12"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="modal-action mt-6 gap-2">
-            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn btn-outline">Cancel</button>
-            <button onClick={handleAddTracking} className="btn btn-primary">✓ Add Update</button>
+          <div className="p-8 bg-[var(--bg-secondary)] border-t border-[var(--border)] grid grid-cols-2 gap-4">
+            <button onClick={() => document.getElementById('tracking_modal').close()} className="btn-outline-clean !py-4 font-black">Abort Sync</button>
+            <button onClick={handleAddTracking} className="btn-gradient !py-4 font-black uppercase text-xs tracking-widest">Execute Update</button>
           </div>
         </div>
       </dialog>
 
       {orders.map(order => (
-        <dialog key={order._id} id={`view_modal_${order._id}`} className="modal modal-bottom sm:modal-middle">
-          <div className="modal-box max-w-2xl bg-white">
-            <button 
-              onClick={() => document.getElementById(`view_modal_${order._id}`).close()}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >✕</button>
-            
-            <h3 className="font-bold text-2xl mb-6 text-gray-900">📦 Tracking History</h3>
-            
-            {order.tracking && order.tracking.length > 0 ? (
-              <div className="space-y-4">
-                {order.tracking.map((track, idx) => (
-                  <div key={idx} className="card bg-gray-50 border border-gray-200">
-                    <div className="card-body">
-                      <div className="flex items-center gap-2">
-                        <span className="badge badge-primary">{idx + 1}</span>
-                        <h4 className="font-bold text-lg text-gray-900">{track.status}</h4>
-                      </div>
-                      <div className="divider my-2"></div>
-                      <p className="text-sm text-gray-700"><strong>📍 Location:</strong> {track.location}</p>
-                      <p className="text-sm text-gray-700"><strong>📅 Date:</strong> {new Date(track.date).toLocaleString()}</p>
-                      {track.note && <p className="text-sm text-gray-700"><strong>📝 Note:</strong> {track.note}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-center opacity-60 py-8">No tracking updates yet</p>
-            )}
+        <dialog key={order._id} id={`view_modal_${order._id}`} className="modal backdrop-blur-md">
+          <div className="modal-box max-w-2xl bg-[var(--bg-card)] border border-[var(--border)] rounded-[40px] p-0 overflow-hidden shadow-2xl">
+            <div className="bg-[var(--bg-secondary)] p-8 border-b border-[var(--border)] flex justify-between items-center">
+              <h3 className="font-black text-2xl text-[var(--text-main)] tracking-tighter italic">Tracking history manifest</h3>
+              <button onClick={() => document.getElementById(`view_modal_${order._id}`).close()} className="text-[var(--text-muted)] hover:text-red-500 transition-colors">
+                <FiX size={24} />
+              </button>
+            </div>
 
-            <div className="modal-action mt-6">
-              <button onClick={() => document.getElementById(`view_modal_${order._id}`).close()} className="btn btn-primary">Close</button>
+            <div className="p-8">
+              {order.tracking && order.tracking.length > 0 ? (
+                <div className="space-y-6 relative ml-4">
+                  <div className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[var(--primary)] to-[var(--border)]"></div>
+                  {order.tracking.map((track, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="relative pl-12"
+                    >
+                      <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-[var(--bg-card)] border-4 border-[var(--primary)] shadow-[0_0_15px_rgba(var(--primary-rgb),0.3)] z-10 flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]"></div>
+                      </div>
+                      <div className="glass-card !bg-[var(--bg-primary)] p-4 border border-[var(--border)] rounded-2xl group hover:border-[var(--primary)] transition-all">
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="font-black text-[var(--text-main)] uppercase tracking-tighter flex items-center gap-2">
+                            <FiActivity className="text-[var(--primary)]" /> {track.status}
+                          </h4>
+                          <span className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest">{new Date(track.date).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-muted)] mb-2">
+                          <FiMapPin className="text-[var(--primary)]" /> {track.location}
+                        </div>
+                        {track.note && (
+                          <p className="text-xs italic text-[var(--text-secondary)] border-l-2 border-[var(--primary)]/20 pl-3 py-1 bg-[var(--bg-secondary)] rounded-r-lg">{track.note}</p>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-20 opacity-40">
+                  <FiInfo className="mx-auto text-4xl mb-4" />
+                  <p className="font-black italic">No fulfillment events logged yet.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="p-8 bg-[var(--bg-secondary)] border-t border-[var(--border)] text-right">
+              <button
+                onClick={() => document.getElementById(`view_modal_${order._id}`).close()}
+                className="btn-outline-clean !py-3 !px-10 font-black text-xs"
+              >
+                Close Logs
+              </button>
             </div>
           </div>
         </dialog>

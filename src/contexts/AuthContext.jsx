@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut, 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signOut,
   onAuthStateChanged,
   updateProfile
 } from 'firebase/auth';
@@ -33,11 +34,16 @@ export const AuthProvider = ({ children }) => {
     return signInWithPopup(auth, provider);
   };
 
+  const facebookLogin = () => {
+    const provider = new FacebookAuthProvider();
+    return signInWithPopup(auth, provider);
+  };
+
   const logout = async () => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/auth/logout`, {}, { withCredentials: true });
     } catch (error) {
-      console.log('Logout API error');
+      // Logout API error
     }
     return signOut(auth);
   };
@@ -54,11 +60,11 @@ export const AuthProvider = ({ children }) => {
       setUser(currentUser);
       if (currentUser) {
         try {
-          await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, 
-            { email: currentUser.email }, 
+          await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`,
+            { email: currentUser.email },
             { withCredentials: true }
           );
-          const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/users/me`, 
+          const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/users/me`,
             { withCredentials: true }
           );
           setDbUser(data);
@@ -80,6 +86,7 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     googleLogin,
+    facebookLogin,
     logout,
     updateUserProfile
   };
